@@ -1,0 +1,71 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+    TreeNode *callDfs(TreeNode* root, int val, int currDepth, int depth){
+        if(!root) return NULL;
+        if(currDepth == depth - 1){
+            TreeNode *leftNode = root -> left;
+            TreeNode *rightNode = root -> right;
+
+            TreeNode *newLeftNode = new TreeNode(val);
+            TreeNode *newRightNode = new TreeNode(val);
+
+            root -> left = newLeftNode;
+            root -> right = newRightNode;
+            newLeftNode -> left = leftNode;
+            newRightNode -> right = rightNode;
+            return root;
+        }
+
+        root -> left = callDfs(root -> left, val, currDepth + 1, depth);
+        root -> right = callDfs(root -> right, val, currDepth + 1, depth);
+        return root;
+    }
+    TreeNode* callBfs(TreeNode *root, int val, int depth){
+        queue<pair<TreeNode*, int>> q;
+        q.push({root, 1});
+
+        while(!q.empty()){
+            TreeNode *frontNode = q.front().first;
+            int currDepth = q.front().second;
+            q.pop();
+
+            if(currDepth == depth - 1){
+                TreeNode *leftNode = frontNode -> left;
+                TreeNode *rightNode = frontNode -> right;
+
+                TreeNode *newLeftNode = new TreeNode(val);
+                TreeNode *newRightNode = new TreeNode(val);
+
+                frontNode -> left = newLeftNode;
+                frontNode -> right = newRightNode;
+                newLeftNode -> left = leftNode;
+                newRightNode -> right = rightNode;
+                continue;
+            }
+            if(frontNode -> left) q.push({frontNode -> left, currDepth + 1});
+            if(frontNode -> right) q.push({frontNode -> right, currDepth + 1});
+        }
+        return root;
+    }
+public:
+    TreeNode* addOneRow(TreeNode* root, int val, int depth) {
+        if(depth == 1){
+            TreeNode *newRoot = new TreeNode(val);
+            newRoot -> left = root;
+            return newRoot;
+        }
+        //int currDepth = 1;
+        //return callDfs(root, val, currDepth, depth);
+        return callBfs(root, val, depth);
+    }
+};

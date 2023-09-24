@@ -1,0 +1,60 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+    int callBfs(TreeNode *root){
+        int ans, currLvl = 0;
+        queue<TreeNode*> q;
+        q.push(root);
+        int maxSum = INT_MIN, sum, size;
+
+        while(!q.empty()){
+            size = q.size();
+            sum = 0;
+            currLvl++;
+            for(int ind = 0; ind < size; ind++){
+                TreeNode *frontNode = q.front();
+                q.pop();
+                if(frontNode -> left) q.push(frontNode -> left);
+                if(frontNode -> right) q.push(frontNode -> right);
+                sum += frontNode -> val;
+            }
+            if(sum > maxSum){
+                maxSum = sum;
+                ans = currLvl;
+            } 
+        }
+        return ans;
+    }
+    void callDfs(TreeNode *root, int level, map<int, int> &hashMap){
+        if(!root) return;
+
+        hashMap[level] += root -> val;
+        callDfs(root -> left, level + 1, hashMap);
+        callDfs(root -> right, level + 1, hashMap);
+    }
+public:
+    int maxLevelSum(TreeNode* root) {
+        //return callBfs(root);
+        map<int, int> hashMap;
+        callDfs(root, 1, hashMap);
+        int ans = 0, maxSum = INT_MIN;
+        for(auto &it : hashMap){
+            int level = it.first;
+            int sum = it.second;
+            if(sum > maxSum){
+                maxSum = sum;
+                ans = level;
+            }
+        }
+        return ans;
+    }
+};

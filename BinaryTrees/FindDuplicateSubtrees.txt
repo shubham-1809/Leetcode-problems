@@ -1,0 +1,29 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+    string callDfs(TreeNode *root, vector<TreeNode*> &duplicates, unordered_map<string, int> &hashMap){
+        if(!root) return "N";
+
+        string tree = to_string(root -> val) + ',' + callDfs(root -> left, duplicates, hashMap) + ',' + callDfs(root -> right, duplicates, hashMap); 
+        hashMap[tree]++;
+        if(hashMap[tree] == 2) duplicates.push_back(root); // if same tree string found again i.e. it occurs for second time then it is duplicate
+        return tree;
+    }
+public:
+    vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+        vector<TreeNode*> duplicates;
+        unordered_map<string, int> hashMap;   // tree we will store in form of string
+
+        callDfs(root, duplicates, hashMap);
+        return duplicates;
+    }
+};

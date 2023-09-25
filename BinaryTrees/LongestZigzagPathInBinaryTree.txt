@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+    void optimal_one(TreeNode *root, int leftVal, int rightVal, int &maxPath){
+        if(!root) return;
+
+        maxPath = max(maxPath, max(leftVal, rightVal));
+        optimal_one(root -> left, rightVal + 1, 0, maxPath);
+        optimal_one(root -> right, 0, leftVal + 1, maxPath);
+    }
+    void optimal_two(TreeNode *root, int steps, bool goLeft, int &maxPath){
+        if(!root) return;
+
+        maxPath = max(maxPath, steps);
+        if(goLeft){
+            optimal_two(root -> left, steps + 1, !goLeft, maxPath);
+            optimal_two(root -> right, 1, goLeft, maxPath);
+        }
+        else{
+            optimal_two(root -> left, 1, goLeft, maxPath);
+            optimal_two(root -> right, steps + 1, !goLeft, maxPath);
+        }
+    }
+public:
+    int longestZigZag(TreeNode* root) {
+        int maxPath = INT_MIN;
+        //optimal_one(root, 0, 0, maxPath);
+        optimal_two(root, 0, true, maxPath);
+        optimal_two(root, 0, false, maxPath);
+        return maxPath;
+    }
+};

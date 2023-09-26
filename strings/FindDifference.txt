@@ -1,0 +1,32 @@
+class Solution {
+    char using_map(string &s, string &t){
+        unordered_map<char, int> hashMap;
+
+        for(char &ch : s) hashMap[ch]++;
+        for(char &ch : t){
+            hashMap[ch]--;
+            if(hashMap[ch] < 0) return ch;
+        }
+        return 'a';
+    }
+    char using_summation(string &s, string &t){
+        int sum = 0;
+
+        for(char &ch : t) sum += ch;
+        for(char &ch : s) sum -= ch;
+        return (char)sum;
+    }
+    char using_xor(string &s, string &t){
+        char XOR = '\0';
+
+        for(char &ch : s) XOR ^= ch;
+        for(char &ch : t) XOR ^= ch;
+        return XOR;
+    }
+public:
+    char findTheDifference(string s, string t) {
+        //return using_map(s, t);
+        //return using_summation(s, t);
+        return using_xor(s, t);
+    }
+};

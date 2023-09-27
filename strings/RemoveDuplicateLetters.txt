@@ -1,0 +1,21 @@
+class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        int size = s.size();
+        string temp = "";
+        vector<int> hash(26, 0), lastInd(26, -1);
+
+        for(int ind = 0; ind < size; ind++) lastInd[s[ind] - 'a'] = ind;
+        for(int ind = 0; ind < size; ind++){
+            char ch = s[ind];
+            if(hash[ch - 'a'] == 1) continue;
+            while(temp.size() > 0 && temp.back() > ch && lastInd[temp.back() - 'a'] > ind){
+                hash[temp.back() - 'a'] = 0;
+                temp.pop_back();
+            }
+            temp.push_back(ch);
+            hash[ch - 'a'] = 1;
+        }
+        return temp;
+    }
+};

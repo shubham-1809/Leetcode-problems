@@ -1,0 +1,30 @@
+class Solution {
+    // using two functions
+    bool checkIncrease(vector<int> &nums, int size){
+        for(int ind = 0; ind < size - 1; ind++){
+            if(nums[ind] > nums[ind + 1]) return false;
+        }
+        return true;
+    }
+    bool checkDecrease(vector<int> &nums, int size){
+        for(int ind = 0; ind < size - 1; ind++){
+            if(nums[ind] < nums[ind + 1]) return false;
+        }
+        return true;
+    }
+    bool usingSingleFunction(vector<int> &nums, int size){
+        bool increase = false, decrease = false;
+
+        for(int ind = 0; ind < size - 1; ind++){
+            if(nums[ind] < nums[ind + 1]) increase = true;
+            if(nums[ind] > nums[ind + 1]) decrease = true;
+        }
+        return (increase && decrease) ? false : true;
+    }
+public:
+    bool isMonotonic(vector<int>& nums) {
+        int size = nums.size();
+        //return checkIncrease(nums, size) || checkDecrease(nums, size);
+        return usingSingleFunction(nums, size);
+    }
+};

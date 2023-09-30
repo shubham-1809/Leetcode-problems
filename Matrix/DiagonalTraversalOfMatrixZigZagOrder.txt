@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& mat) {
+        // when ever diagonal traversal of matrix is given always use (row + col) / (row - col) concept using map
+        int n = mat.size(), m = mat[0].size();
+        map<int, vector<int>> hashMap;
+        vector<int> diagonal;
+
+        for(int row = 0; row < n; row++){
+            for(int col = 0; col < m; col++){
+                hashMap[row + col].push_back(mat[row][col]);
+            }
+        }
+        bool flip = true;
+        for(auto &it : hashMap){
+            if(flip){
+                for(int ind = it.second.size() - 1; ind >= 0; ind--) diagonal.push_back(it.second[ind]);
+            }
+            else{
+                for(int ind = 0; ind < it.second.size(); ind++) diagonal.push_back(it.second[ind]);
+            }
+            flip = !flip;
+        }
+        return diagonal;
+    }
+};

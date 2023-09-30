@@ -1,0 +1,50 @@
+class Solution {
+    vector<vector<int>> usingMapAndSortFunction(vector<vector<int>>& mat){
+        int n = mat.size(), m = mat[0].size();
+        map<int, vector<int>> hashMap;
+
+        //step 1: create map and store values, concept of row - col is used for diagonal matrix traversal
+        for(int row = 0; row < n; row++){
+            for(int col = 0; col < m; col++){
+                hashMap[row - col].push_back(mat[row][col]);
+            }
+        }
+        // step 2: sort these vectors inside map
+        for(auto &it : hashMap) sort(it.second.begin(), it.second.end());
+        //step 3: start traversal from back of both matrix and map and store the values back in matrix
+        //this is becuase we don't want to shift the indexes of vector inside map hence storing values by traversing from back
+        for(int row = n - 1; row >= 0; row--){
+            for(int col = m - 1; col >= 0; col--){
+                mat[row][col] = hashMap[row - col].back();
+                hashMap[row - col].pop_back();
+            }
+        }
+        return mat;
+    }
+    vector<vector<int>> usingMapAndPriorityQueue(vector<vector<int>>& mat){
+        int n = mat.size(), m = mat[0].size();
+        map<int, priority_queue<int, vector<int>, greater<int>>> hashMap;
+
+        // step 1: create map and store values, concept of row - col is used for diagonal matrix traversal
+        // min heap is used to get min val every time while forming the final answer
+        for(int row = 0; row < n; row++){
+            for(int col = 0; col < m; col++){
+                hashMap[row - col].push(mat[row][col]);
+            }
+        }
+        // step 2: simply traverse and push values inside matrix back in sorted order using min heap 
+        // after this pop the top of min heap so that in next iteration we can get the min val for new index in sorted order
+        for(int row = 0; row < n; row++){
+            for(int col = 0; col < m; col++){
+                mat[row][col] = hashMap[row - col].top();
+                hashMap[row - col].pop();
+            }
+        }
+        return mat;
+    }
+public:
+    vector<vector<int>> diagonalSort(vector<vector<int>>& mat) {
+        //return usingMapAndSortFunction(mat);
+        return usingMapAndPriorityQueue(mat);
+    }
+};

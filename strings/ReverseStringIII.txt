@@ -1,0 +1,30 @@
+class Solution {
+    string approachOne(string &s){
+        int size = s.size();
+
+        for(int ind = 0; ind < size; ind++){
+            if(s[ind] != ' '){
+                int j = ind;
+                while(j < size && s[j] != ' ') j++;
+                reverse(s.begin() + ind, s.begin() + j);
+                ind = j;
+            }
+        }
+        return s;
+    }
+    string approachTwo(string &s){
+        stringstream ss(s);
+        string token = "", result = "";
+
+        while(ss >> token){
+            reverse(token.begin(), token.end());
+            result += token + " ";
+        }
+        return result.substr(0, result.size() - 1);
+    }
+public:
+    string reverseWords(string s) {
+        //return approachOne(s);
+        return approachTwo(s);
+    }
+};

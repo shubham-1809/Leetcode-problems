@@ -1,0 +1,16 @@
+class Solution {
+    int bruteForce(vector<int> &nums){
+        int size = nums.size(), cnt = 0;
+
+        for(int first = 0; first < size; first++){
+            for(int second = 0; second < size; second++){
+                if(first != second && first < second && nums[first] == nums[second]) cnt++;
+            }
+        }
+        return cnt;
+    }
+public:
+    int numIdenticalPairs(vector<int>& nums) {
+        return bruteForce(nums);
+    }
+};

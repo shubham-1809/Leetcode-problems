@@ -1,0 +1,43 @@
+class Solution {
+    vector<vector<string>> bruteForce(vector<string> &strs){
+        int size = strs.size();
+        vector<vector<string>> ans;
+        unordered_map<string, vector<string>> hashMap;
+
+        for(int ind = 0; ind < size; ind++){
+            string temp = strs[ind];
+            sort(temp.begin(), temp.end());
+            hashMap[temp].push_back(strs[ind]);
+        }
+        for(auto &it : hashMap) ans.push_back(it.second);
+        return ans;
+    }
+    string generateWord(string &word){
+        int hash[26] = {0};
+
+        for(char &ch : word) hash[ch - 'a']++;
+        string newWord = "";
+        for(int ind = 0; ind < 26; ind++){
+            if(hash[ind] > 0) newWord += string(hash[ind], ind + 'a');
+        }
+        return newWord;
+    }
+    vector<vector<string>> optimal(vector<string> &strs){
+        int size = strs.size();
+        vector<vector<string>> ans;
+        unordered_map<string, vector<string>> hashMap;
+
+        for(int ind = 0; ind < size; ind++){
+            string word = strs[ind];
+            string newWord = generateWord(word);
+            hashMap[newWord].push_back(word);
+        }
+        for(auto &it : hashMap) ans.push_back(it.second);
+        return ans;
+    }
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        //return bruteForce(strs);
+        return optimal(strs);
+    }
+};

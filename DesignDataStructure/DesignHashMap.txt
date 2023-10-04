@@ -1,0 +1,48 @@
+class MyHashMap {
+    vector<list<pair<int, int>>> mpp;
+    int size;
+public:
+    MyHashMap() {
+        size = 1000;
+        mpp.resize(size);
+    }
+    int hashFunc(int key){
+        return key % size;
+    }
+    list<pair<int, int>> :: iterator searchLL(int key){
+        int bucketInd = hashFunc(key);
+        list<pair<int, int>> :: iterator it = mpp[bucketInd].begin();
+        while(it != mpp[bucketInd].end()){
+            if(it -> first == key) return it;
+            it++;
+        }
+        return it;
+    }
+    void put(int key, int value) {
+        int bucketInd = hashFunc(key);
+        list<pair<int, int>> :: iterator it = searchLL(key);
+        if(it != mpp[bucketInd].end()) mpp[bucketInd].erase(it);
+        mpp[bucketInd].push_back({key, value});
+    }
+    
+    int get(int key) {
+        int bucketInd = hashFunc(key);
+        list<pair<int, int>> :: iterator it = searchLL(key);
+        if(it == mpp[bucketInd].end()) return -1;
+        return it -> second;
+    }
+    
+    void remove(int key) {
+        int bucketInd = hashFunc(key);
+        list<pair<int, int>> :: iterator it = searchLL(key);
+        if(it != mpp[bucketInd].end()) mpp[bucketInd].erase(it);
+    }
+};
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * MyHashMap* obj = new MyHashMap();
+ * obj->put(key,value);
+ * int param_2 = obj->get(key);
+ * obj->remove(key);
+ */

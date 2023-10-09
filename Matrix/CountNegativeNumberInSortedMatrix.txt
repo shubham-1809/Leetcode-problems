@@ -1,0 +1,51 @@
+class Solution {
+    int bruteForce(int n, int m, vector<vector<int>> &grid){
+        int cnt = 0;
+
+        for(int row = 0; row < n; row++){
+            for(int col = 0; col < m; col++){
+                if(grid[row][col] < 0) cnt++;
+            }
+        }
+        return cnt;
+    }
+    int getNegInd(vector<int> &vec, int end){
+        int start = 0;
+
+        while(start <= end){
+            int mid = (start + end) >> 1;
+            if(vec[mid] < 0) end = mid - 1;
+            else start = mid + 1;
+        }
+        return start;
+    }
+    int better(int n, int m, vector<vector<int>> &grid){
+        int cnt = 0;
+
+        for(int row = 0; row < n; row++){
+            int first_neg_ind = getNegInd(grid[row], m - 1);
+            cnt += m - first_neg_ind;
+        }
+        return cnt;
+    }
+    int optimal(int n, int m, vector<vector<int>> &grid){
+        int cnt = 0, row = n - 1, col = 0;
+
+        while(row >= 0 && col < m){
+            if(grid[row][col] >= 0) col++;
+            else{
+                cnt += m - col;
+                row--;
+            }
+        }
+        return cnt;
+    }
+public:
+    int countNegatives(vector<vector<int>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+
+        //return bruteForce(n, m, grid);
+        //return better(n, m, grid);
+        return optimal(n, m, grid);
+    }
+};

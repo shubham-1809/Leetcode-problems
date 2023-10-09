@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int x) {
+        // can be solved using pick/ not pick technique with recursion and memoization but will give tle
+        int size = nums.size();
+        unordered_map<int, int> hashMap;
+        int totSum = 0;
+        hashMap[0] = -1;
+
+        for(int ind = 0; ind < size; ind++){
+            totSum += nums[ind];
+            hashMap[totSum] = ind;
+        }
+        if(totSum < x) return -1;
+        int remSum = totSum - x, longestSubarrLen = INT_MIN;
+
+        totSum = 0;
+        for(int ind = 0; ind < size; ind++){
+            totSum += nums[ind];
+            if(hashMap.find(totSum - remSum) != hashMap.end()){
+                longestSubarrLen = max(longestSubarrLen, ind - hashMap[totSum - remSum]);
+            }
+        }
+        return longestSubarrLen == INT_MIN ? -1 : size - longestSubarrLen;
+    }
+};

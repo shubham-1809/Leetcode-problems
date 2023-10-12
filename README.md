@@ -1,3 +1,2 @@
-# Leetcode-problems
-<br>
-Author - Shubham Chouksey
+Solutions to popular Leetcode problems.
+

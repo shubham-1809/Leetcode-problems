@@ -1,0 +1,50 @@
+class Solution {
+    int recursion(vector<int> &cost, int ind, int &size){
+        if(ind >= size) return 0;
+
+        int jumpOne = cost[ind] + recursion(cost, ind + 1, size);
+        int jumpTwo = cost[ind] + recursion(cost, ind + 2, size);
+        return min(jumpOne, jumpTwo);
+    }
+    int memoize(vector<int> &cost, int ind, int &size, vector<int> &dp){
+        if(ind >= size) return 0;
+        if(dp[ind] != -1) return dp[ind];
+
+        int jumpOne = cost[ind] + memoize(cost, ind + 1, size, dp);
+        int jumpTwo = cost[ind] + memoize(cost, ind + 2, size, dp);
+        return dp[ind] = min(jumpOne, jumpTwo);
+    }
+    int tabulation(vector<int> &cost, int &size){
+        vector<int> dp(size + 2, 0);
+        int jumpOne, jumpTwo;
+
+        for(int ind = size - 1; ind >= 0; ind--){
+            jumpOne = cost[ind] + dp[ind + 1];
+            jumpTwo = cost[ind] + dp[ind + 2];
+            dp[ind] = min(jumpOne, jumpTwo);
+        }
+        return min(dp[0], dp[1]);
+    }
+    int space_optimization(vector<int> &cost, int &size){
+        int jumpOne, jumpTwo, curr, ahead = 0, aheadTwo = 0;
+
+        for(int ind = size - 1; ind >= 0; ind--){
+            jumpOne = cost[ind] + ahead;
+            jumpTwo = cost[ind] + aheadTwo;
+            curr = min(jumpOne, jumpTwo);
+            aheadTwo = ahead;
+            ahead = curr;
+        }
+        return min(ahead, aheadTwo);
+    }
+public:
+    int minCostClimbingStairs(vector<int>& cost) {
+        int size = cost.size();
+
+        //return min(recursion(cost, 0, size), recursion(cost, 1, size));
+        //vector<int> dp(size + 1, -1);
+        //return min(memoize(cost, 0, size, dp), memoize(cost, 1, size, dp));
+        //return tabulation(cost, size);
+        return space_optimization(cost, size);
+    }
+};

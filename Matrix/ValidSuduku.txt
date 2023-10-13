@@ -1,0 +1,68 @@
+class Solution {
+    bool checkValidBox(int rowStart, int rowEnd, int colStart, int colEnd, vector<vector<char>> &board){
+        unordered_set<char> hashSet;
+            
+        for(int row = rowStart; row <= rowEnd; row++){
+            for(int col = colStart; col <= colEnd; col++){
+                if(board[row][col] == '.') continue;
+                if(hashSet.find(board[row][col]) != hashSet.end()) return false;
+                hashSet.insert(board[row][col]);
+            }
+        }
+        return true;
+    }
+    bool bruteForce(vector<vector<char>> &board){
+        // check all rows
+        for(int row = 0; row < 9; row++){
+            unordered_set<char> hashSet;
+            for(int col = 0; col < 9; col++){
+                if(board[row][col] == '.') continue;
+                if(hashSet.find(board[row][col]) != hashSet.end()) return false;
+                hashSet.insert(board[row][col]);
+            }
+        }
+        // check all columns
+        for(int col = 0; col < 9; col++){
+            unordered_set<char> hashSet;
+            for(int row = 0; row < 9; row++){
+                if(board[row][col] == '.') continue;
+                if(hashSet.find(board[row][col]) != hashSet.end()) return false;
+                hashSet.insert(board[row][col]);
+            }
+        }
+        // check all 3 X 3 board
+        for(int row = 0; row < 9; row += 3){
+            int rowEnd = row + 2;
+            for(int col = 0; col < 9; col += 3){
+                int colEnd = col + 2;
+                if(!checkValidBox(row, rowEnd, col, colEnd, board)) return false;
+            }
+        }
+        return true;
+    }
+    bool optimal(vector<vector<char>>& board){
+        unordered_set<string> hashSet;
+
+        for(int row = 0; row < 9; row++){
+            for(int col = 0; col < 9; col++){
+                if(board[row][col] == '.') continue;
+
+                string rowStr = string(board[row][col], 1) + '_' + "ROW" + '_' + to_string(row);
+                string colStr = string(board[row][col], 1) + '_' + "COL" + '_' + to_string(col);
+                string boxStr = string(board[row][col], 1) + '_' + "BOX" + '_' + to_string(row / 3) + '_' + to_string(col / 3);
+
+                if(hashSet.find(rowStr) != hashSet.end() || hashSet.find(colStr) != hashSet.end() || hashSet.find(boxStr) != hashSet.end()) return false;
+
+                hashSet.insert(rowStr);
+                hashSet.insert(colStr);
+                hashSet.insert(boxStr);
+            }
+        }
+        return true;
+    }
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        //return bruteForce(board);
+        return optimal(board);
+    }
+};

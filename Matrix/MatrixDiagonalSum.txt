@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int diagonalSum(vector<vector<int>>& mat) {
+        int n = mat.size(), row = 0, col = 0, totSum = 0;
+
+        // primary diagonal
+        while(row < n && col < n){
+            totSum += mat[row][col];
+            row++; col++;
+        }
+        row = 0; col = n - 1;
+        while(row < n && col >= 0){
+            if(row != col) totSum += mat[row][col];
+            row++; col--;
+        }
+        return totSum;
+    }
+};

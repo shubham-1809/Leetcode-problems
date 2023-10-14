@@ -1,0 +1,42 @@
+class Solution {
+    bool bruteForce(vector<vector<int>>& matrix, int &n){
+        unordered_set<int> hashSet;
+
+        for(int row = 0; row < n; row++){
+            hashSet.clear();
+            for(int col = 0; col < n; col++){
+                if(hashSet.find(matrix[row][col]) != hashSet.end()) return false;
+                hashSet.insert(matrix[row][col]);
+            }
+        }
+        for(int row = 0; row < n; row++){
+            hashSet.clear();
+            for(int col = 0; col < n; col++){
+                if(hashSet.find(matrix[col][row]) != hashSet.end()) return false;
+                hashSet.insert(matrix[col][row]);
+            }
+        }
+        return true;
+    }
+    bool optimal(vector<vector<int>>& matrix, int &n){
+        unordered_set<string> hashSet;
+
+        for(int row = 0; row < n; row++){
+            for(int col = 0; col < n; col++){
+                string rowStr = to_string(matrix[row][col]) + '_' + to_string(row) + '_' + "ROW";
+                string colStr = to_string(matrix[row][col]) + '_' + to_string(col) + '_' + "COL";
+                if(hashSet.find(rowStr) != hashSet.end() || hashSet.find(colStr) != hashSet.end()) return false;
+                hashSet.insert(rowStr);
+                hashSet.insert(colStr);
+            }
+        }
+        return true;
+    }
+public:
+    bool checkValid(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+
+        //return bruteForce(matrix, n);
+        return optimal(matrix, n);
+    }
+};

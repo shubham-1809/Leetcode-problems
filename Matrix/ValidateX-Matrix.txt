@@ -1,0 +1,41 @@
+class Solution {
+    bool bruteForce(int &n, vector<vector<int>> &grid){
+        int row = 0, col = 0;
+
+        while(row < n && col < n){
+            if(grid[row][col] == 0) return false;
+            grid[row][col] = -1;
+            row++; col++;
+        }
+        row = 0; col = n - 1;
+        while(row < n && col >= 0){
+            if(grid[row][col] == 0) return false;
+            grid[row][col] = -1;
+            row++; col--;
+        }
+        for(row = 0; row < n; row++){
+            for(col = 0; col < n; col++){
+                if(grid[row][col] == -1) continue;
+                if(grid[row][col] != 0) return false;
+            }
+        }
+        return true;
+    }
+    bool optimal(int &n, vector<vector<int>> &grid){
+        for(int row = 0; row < n; row++){
+            for(int col = 0; col < n; col++){
+                if(row - col == 0 && grid[row][col] == 0) return false;
+                if(row + col == n - 1 && grid[row][col] == 0) return false;
+                if(row - col != 0 && row + col != n - 1 && grid[row][col] != 0) return false;
+            }
+        }
+        return true;
+    }
+public:
+    bool checkXMatrix(vector<vector<int>>& grid) {
+        int n = grid.size();
+
+        //return bruteForce(n, grid);
+        return optimal(n, grid);
+    }
+};

@@ -1,4 +1,4 @@
-<h3> My solutions covering brute force to optimal solutions to popular Leetcode problems on various Data Structures and Algorithm including: </h3>
+<h3> My <b>C++</b> solutions covering brute force to optimal codes to popular Leetcode problems on various Data Structures and Algorithm including: </h3>
 <h4> Data Structures </h4>
 <ul>
   <li> Arrays </li>

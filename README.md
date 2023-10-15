@@ -2,11 +2,14 @@
 <h4> Data Structures </h4>
 <ul>
   <li> Arrays </li>
+  <li> Matrix / 2D Arrays </li>
+  <li> Strings </li>
   <li> Stacks </li>
   <li> Queues </li>
-  <li> Linked Lists </li>
-  <li> Trees </li>
-  <li> Graphs </li>
+  <li> Linked Lists (Single / Double)</li>
+  <li> Heaps </li>
+  <li> Binary Trees / Binary Search Trees (BSTs) </li>
+  <li> Graphs (Directed / Undirected) </li>
 </ul>
 <h4> Algorithms </h4>
 <ul>
@@ -19,5 +22,7 @@
   <li> Slow and Fast Pointers </li>
   <li> Greedy Techniques </li>
   <li> Dynamic Programming (includes Recursion -> Memoization -> Tabulation -> Space Optimization) </li>
+  <li> Shortest Path Problems (Dijkstra's Algorithm) </li>
+  <li> Disjoint Set Union (DSU) - for Dynamic Graphs </li>
 </ul>
 

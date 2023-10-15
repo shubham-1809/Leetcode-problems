@@ -1,0 +1,27 @@
+class Solution {
+    int recursion(int ind, int wallCnt, int &size, vector<int> &cost, vector<int> &time){
+        if(wallCnt <= 0) return 0;
+        if(ind >= size) return 1e9;
+
+        int pickWall = cost[ind] + recursion(ind + 1, wallCnt - (1 + time[ind]), size, cost, time);
+        int notPick = recursion(ind + 1, wallCnt, size, cost, time);
+        return min(pickWall, notPick);
+    }
+    int memoize(int ind, int wallCnt, int &size, vector<int> &cost, vector<int> &time, vector<vector<int>> &dp){
+        if(wallCnt <= 0) return 0;
+        if(ind >= size) return 1e9;
+        if(dp[ind][wallCnt] != -1) return dp[ind][wallCnt];
+
+        int pickWall = cost[ind] + memoize(ind + 1, wallCnt - (1 + time[ind]), size, cost, time, dp);
+        int notPick = memoize(ind + 1, wallCnt, size, cost, time, dp);
+        return dp[ind][wallCnt] = min(pickWall, notPick);
+    }
+public:
+    int paintWalls(vector<int>& cost, vector<int>& time) {
+        int size = cost.size();
+
+        //return recursion(0, size, size, cost, time);
+        vector<vector<int>> dp(size + 1, vector<int>(size + 1, -1));
+        return memoize(0, size, size, cost, time, dp);
+    }
+};

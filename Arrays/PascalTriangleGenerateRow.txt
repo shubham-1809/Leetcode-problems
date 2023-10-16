@@ -1,0 +1,18 @@
+class Solution {
+    vector<int> generateRow(int row){
+        vector<int> temp;
+        long long res = 1;
+        temp.push_back(res);
+
+        for(int ind = 1; ind < row; ind++){
+            res  *= (row  - ind);
+            res /= ind;
+            temp.push_back(res);
+        }
+        return temp;
+    }
+public:
+    vector<int> getRow(int rowIndex) {
+        return generateRow(rowIndex + 1);
+    }
+};

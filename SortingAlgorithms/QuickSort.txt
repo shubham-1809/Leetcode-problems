@@ -1,0 +1,38 @@
+/*
+	The function is called with the parameters:
+	quickSort(input, 0, size - 1);
+
+*/
+
+int partitionArray(int input[], int start, int end) {
+	// Write your code here
+	int pivot = input[start], cnt = 0;
+	for(int ind = start + 1; ind <= end; ind++){
+		if(input[ind] <= pivot) cnt++;
+	}
+	int pIndex = start + cnt;
+	swap(input[pIndex], input[start]);
+
+	int low = start, high = end;
+	while(low < pIndex && high > pIndex){
+		while(low < pIndex && input[low] <= input[pIndex]) low++;
+		while(high > pIndex && input[high] > input[pIndex]) high--;
+		if(low < pIndex && high > pIndex)
+			swap(input[low++], input[high--]);
+	}
+	return pIndex;
+}
+
+void quickSort(int input[], int start, int end) {
+	/*
+		Don't write main().
+		Don't read input, it is passed as function argument.
+		Change in the given array itself.
+		Taking input and printing output is handled automatically.
+	*/
+	if(start >= end) return;
+
+	int partition_Ind = partitionArray(input, start, end);
+	quickSort(input, start, partition_Ind - 1);
+	quickSort(input, partition_Ind + 1, end);
+}

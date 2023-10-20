@@ -1,0 +1,117 @@
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * class NestedInteger {
+ *   public:
+ *     // Return true if this NestedInteger holds a single integer, rather than a nested list.
+ *     bool isInteger() const;
+ *
+ *     // Return the single integer that this NestedInteger holds, if it holds a single integer
+ *     // The result is undefined if this NestedInteger holds a nested list
+ *     int getInteger() const;
+ *
+ *     // Return the nested list that this NestedInteger holds, if it holds a nested list
+ *     // The result is undefined if this NestedInteger holds a single integer
+ *     const vector<NestedInteger> &getList() const;
+ * };
+ */
+
+// Approach 1(BRUTE FORCE): using stack that is store each object inside stack which will take lots of space
+class NestedIterator {
+public:
+    stack<NestedInteger> st;
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        int size = nestedList.size();
+        for(int ind = size - 1; ind >= 0; ind--) st.push(nestedList[ind]);
+    }
+    
+    int next() {
+        NestedInteger val = st.top();
+        st.pop();
+        return val.getInteger();
+    }
+    
+    bool hasNext() {
+        while(!st.empty()){
+            NestedInteger topVal = st.top();
+            if(topVal.isInteger()) return true;
+            st.pop();
+            vector<NestedInteger> &tempList = topVal.getList();
+            int size = tempList.size();
+            for(int ind = size - 1; ind >= 0; ind--) st.push(tempList[ind]);
+        }
+        return false;
+    }
+};
+
+/**
+ * Your NestedIterator object will be instantiated and called as such:
+ * NestedIterator i(nestedList);
+ * while (i.hasNext()) cout << i.next();
+ */
+
+
+
+##################################################################################################################################################
+
+// Approach 2(Better): rather than storing objects in stack, simply store their address, this will take less space
+class NestedIterator {
+public:
+    stack<NestedInteger*> st;
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        int size = nestedList.size();
+        for(int ind = size - 1; ind >= 0; ind--) st.push(&nestedList[ind]);
+    }
+    
+    int next() {
+        NestedInteger *val = st.top();
+        st.pop();
+        return val -> getInteger();
+    }
+    
+    bool hasNext() {
+        while(!st.empty()){
+            NestedInteger *topVal = st.top();
+            if(topVal -> isInteger()) return true;
+            st.pop();
+            vector<NestedInteger> &tempList = topVal -> getList();
+            int size = tempList.size();
+            for(int ind = size - 1; ind >= 0; ind--) st.push(&tempList[ind]);
+        }
+        return false;
+    }
+};
+
+
+
+####################################################################################################################################################
+
+// Approach 3(Optimal):
+//If you notice, hasNext() is being called before every call to next(), and doing so much operation in
+//hasNext() is not good as it is frequently called. So, it's better to pre save the result.
+//It will make next() and hasNext() a O(1) call.  
+class NestedIterator {
+public:
+    queue<int> q;
+    void flattenList(vector<NestedInteger> &nestedList){
+        for(int ind = 0; ind < nestedList.size(); ind++){
+            NestedInteger &val = nestedList[ind];
+            if(val.isInteger()) q.push(val.getInteger());
+            flattenList(val.getList());
+        }
+    }
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        flattenList(nestedList);
+    }
+    
+    int next() {
+        NestedInteger frontVal = q.front();
+        q.pop();
+        return frontVal.getInteger();
+    }
+    
+    bool hasNext() {
+       if(q.empty()) return false;
+       return true;
+    }
+};

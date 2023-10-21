@@ -1,0 +1,13 @@
+int majorityElement(vector<int> v) {
+	// Write your code here
+	int key, cnt = 0, size = v.size();
+	for(int ind = 0; ind < size; ind++){
+		if(cnt == 0){
+			cnt = 1;
+			key = v[ind];
+		}
+		else if(key == v[ind]) cnt++;
+		else cnt--;
+	}
+	return key;
+}

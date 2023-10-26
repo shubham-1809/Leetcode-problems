@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int numFactoredBinaryTrees(vector<int>& arr) {
+        sort(arr.begin(), arr.end());
+        unordered_map<int, long long> hashMap;
+        int size = arr.size(), mod = 1e9 + 7;
+        hashMap[arr[0]] = 1;
+
+        for(int ind = 1; ind < size; ind++){
+            hashMap[arr[ind]] = 1;
+            for(int prev = 0; prev < ind; prev++){
+                int leftChild = arr[prev];
+                if(arr[ind] % leftChild == 0 && hashMap.find(arr[ind] / leftChild) != hashMap.end()){
+                    long long ways_left = hashMap[leftChild];
+                    long long ways_right = hashMap[arr[ind] / leftChild];
+                    hashMap[arr[ind]] += ways_left * ways_right;
+                }
+            }
+        }
+        long cnt = 0;
+        for(auto &it : hashMap){
+            cnt = (cnt + it.second) % mod;
+        }
+        return (int)cnt;
+    } 
+};

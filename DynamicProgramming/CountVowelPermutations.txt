@@ -1,0 +1,58 @@
+class Solution {
+    int recursion(char ch, int n){
+        if(n == 0) return 1;
+
+        switch(ch){
+            case 'a' : return recursion('e', n - 1) % mod;
+            case 'e' : return (recursion('a', n - 1) + recursion('i', n - 1)) % mod;
+            case 'i' : return (recursion('a', n - 1) + recursion('e', n - 1) + recursion('o', n - 1) + recursion('u', n - 1)) % mod;
+            case 'o' : return (recursion('i', n - 1) + recursion('u', n - 1)) % mod;
+            case 'u' : return recursion('a', n - 1) % mod;
+        }
+        return 0;
+    }
+    int solve_using_recursion(int n){
+        long result = 0;
+
+        result = (result + recursion('a', n - 1)) % mod;
+        result = (result + recursion('e', n - 1)) % mod;
+        result = (result + recursion('i', n - 1)) % mod;
+        result = (result + recursion('o', n - 1)) % mod;
+        result = (result + recursion('u', n - 1)) % mod;
+
+        return result;
+    }
+    long long memoize(int ch, int n, vector<vector<long long>> &dp){
+        if(n == 0) return 1;
+        if(dp[ch][n] != -1) return dp[ch][n];
+
+        switch(ch){
+            case 0 : return dp[ch][n] = memoize(e, n - 1, dp) % mod;
+            case 1 : return dp[ch][n] = (memoize(a, n - 1, dp) + memoize(i, n - 1, dp)) % mod;
+            case 2 : return dp[ch][n] = (memoize(a, n - 1, dp) + memoize(e, n - 1, dp) + memoize(o, n - 1, dp) + memoize(u, n - 1, dp)) % mod;
+            case 3 : return dp[ch][n] = (memoize(i, n - 1, dp) + memoize(u, n - 1, dp)) % mod;
+            case 4 : return dp[ch][n] = memoize(a, n - 1, dp) % mod;
+        }
+        return dp[ch][n] = 0;
+    }
+    long long solve_using_memoize(int n, vector<vector<long long>> &dp){
+        long result = 0;
+
+        result = (result + memoize(a, n - 1, dp)) % mod;
+        result = (result + memoize(e, n - 1, dp)) % mod;
+        result = (result + memoize(i, n - 1, dp)) % mod;
+        result = (result + memoize(o, n - 1, dp)) % mod;
+        result = (result + memoize(u, n - 1, dp)) % mod;
+
+        return result;
+    }
+public:
+    int mod = 1e9 + 7;
+    int a = 0, e = 1, i = 2, o = 3, u = 4;
+    int countVowelPermutation(int n) {
+        //return solve_using_recursion(n);
+        // to memoize this solution we have convert all vowels to below given encoding then only we can declare a 2D DP vector of type int, int
+        vector<vector<long long>> dp(5, vector<long long> (n + 1, -1));
+        return solve_using_memoize(n, dp);
+    }
+};

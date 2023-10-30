@@ -1,0 +1,34 @@
+class Solution {
+    public:
+    int getOneBitsCnt(int num){
+        int cnt = 0;
+        while(num){
+            cnt += num & 1;
+            num >>= 1;
+        }
+        return cnt;
+    }
+    void approach_one(vector<int> &arr){
+        auto lambda = [&](int &first, int &second){
+        int cnt_first_bits = getOneBitsCnt(first);
+        int cnt_second_bits = getOneBitsCnt(second);
+        if(cnt_first_bits == cnt_second_bits) return first < second;
+        return cnt_first_bits < cnt_second_bits;
+        };
+        sort(arr.begin(), arr.end(), lambda);
+    }
+    void approach_two(vector<int> &arr){
+        auto lambda = [](int &first, int &second){
+        int cnt_first_bits = __builtin_popcount(first);
+        int cnt_second_bits = __builtin_popcount(second);
+        if(cnt_first_bits == cnt_second_bits) return first < second;
+        return cnt_first_bits < cnt_second_bits;
+        };
+        sort(arr.begin(), arr.end(), lambda);
+    }
+    vector<int> sortByBits(vector<int>& arr) {
+        //approach_one(arr);
+        approach_two(arr);
+        return arr;
+    }
+};

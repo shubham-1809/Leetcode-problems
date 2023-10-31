@@ -1,0 +1,21 @@
+class Solution {
+    vector<int> bruteForce(vector<int> &pref){
+        int size = pref.size();
+        vector<int> ans;
+        ans.push_back(pref[0]);
+
+        for(int ind = 1; ind < size; ind++) ans.push_back(pref[ind] ^ pref[ind - 1]);
+        return ans;
+    }
+    vector<int> optimal(vector<int> &pref){
+        int size = pref.size();
+
+        for(int ind = size - 1; ind > 0; ind--) pref[ind] ^= pref[ind - 1];
+        return pref;
+    }
+public:
+    vector<int> findArray(vector<int>& pref) {
+        //return bruteForce(pref);
+        return optimal(pref);
+    }
+};

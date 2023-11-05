@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int getWinner(vector<int>& arr, int k) {
+        int maxVal = *max_element(arr.begin(), arr.end());
+        int winner = arr[0], winStreak = 0, size = arr.size();
+
+        if(k >= size) return maxVal;
+        for(int ind = 1; ind < size; ind++){
+            if(arr[ind] > winner){
+                winner = arr[ind];
+                winStreak = 1;
+            }
+            else winStreak++;
+
+            if(winner == maxVal || winStreak == k) return winner;
+        }
+        return winner;
+    }
+};

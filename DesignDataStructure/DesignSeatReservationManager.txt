@@ -1,0 +1,70 @@
+class SeatManager {
+/* brute force    
+public:
+    vector<int> arr;
+    int size;
+    SeatManager(int n) {
+        size = n;
+        arr.resize(size + 1, -1);
+    }
+    
+    int reserve() {
+        for(int seat = 1; seat < size + 1; seat++){
+            if(arr[seat] == -1){
+                arr[seat] = 1;
+                return seat;
+            }
+        }
+        return -1;
+    }
+    
+    void unreserve(int seatNumber) {
+        arr[seatNumber] = -1;
+    }*/
+
+/* better
+public:
+    priority_queue<int, vector<int>, greater<int>> pq;
+    SeatManager(int n) {
+        for(int seat = 1; seat <= n; seat++) pq.push(seat);
+    }
+    
+    int reserve() {
+        int seat = pq.top();
+        pq.pop();
+        return seat;
+    }
+    
+    void unreserve(int seatNumber) {
+        pq.push(seatNumber);
+    }*/
+
+// optimal    
+public:
+    priority_queue<int, vector<int>, greater<int>> pq;
+    int seat_tracker;
+    SeatManager(int n) {
+        seat_tracker = 1;
+    }
+    
+    int reserve() {
+        if(!pq.empty()){
+            int seat = pq.top();
+            pq.pop();
+            return seat;
+        }
+        int seat = seat_tracker++;
+        return seat;
+    }
+    
+    void unreserve(int seatNumber) {
+        pq.push(seatNumber);
+    }
+};
+
+/**
+ * Your SeatManager object will be instantiated and called as such:
+ * SeatManager* obj = new SeatManager(n);
+ * int param_1 = obj->reserve();
+ * obj->unreserve(seatNumber);
+ */

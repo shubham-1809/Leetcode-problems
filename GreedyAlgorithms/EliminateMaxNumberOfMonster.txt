@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int eliminateMaximum(vector<int>& dist, vector<int>& speed) {
+        int size = dist.size();
+        vector<int> time(size);
+
+        for(int monster = 0; monster < size; monster++) time[monster] = ceil((float)dist[monster] / speed[monster]);
+        sort(time.begin(), time.end());
+        int time_passed = 1, cnt = 1;
+
+        for(int monster = 1; monster < size; monster++){
+            if(time[monster] - time_passed <= 0) return cnt;
+            cnt++;
+            time_passed++;
+        }
+        return cnt;
+    }
+};

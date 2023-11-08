@@ -1,0 +1,16 @@
+class Solution {
+    string bruteForce(string &address){
+        int index = 0, size = address.size();
+        string ans;
+
+        for(; index < size; index++){
+            if(address[index] == '.') ans += "[.]";
+            else ans += address[index];
+        }
+        return ans;
+    }
+public:
+    string defangIPaddr(string address) {
+        return bruteForce(address);
+    }
+};

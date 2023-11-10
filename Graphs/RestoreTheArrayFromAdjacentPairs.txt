@@ -1,0 +1,26 @@
+class Solution {
+    void callDfs(int node, unordered_map<int, vector<int>> &hashMap, int prev, vector<int> &result){
+        result.push_back(node);
+
+        for(auto &it : hashMap[node]){
+            if(it != prev) callDfs(it, hashMap, node, result);
+        }
+    }
+public:
+    vector<int> restoreArray(vector<vector<int>>& adjacentPairs) {
+        unordered_map<int, vector<int>> hashMap;
+        for(auto &it : adjacentPairs){
+            int first = it[0];
+            int second = it[1];
+            hashMap[first].push_back(second);
+            hashMap[second].push_back(first);
+        }
+        int start = -1;
+        for(auto &it : hashMap){
+            if(it.second.size() == 1) start = it.first;
+        }
+        vector<int> result;
+        callDfs(start, hashMap, INT_MIN, result);
+        return result;
+    }
+};

@@ -1,0 +1,41 @@
+class Solution {
+    bool isVowel(char ch){
+        char temp = tolower(ch);
+        return (temp == 'a' || temp == 'e' || temp == 'i' || temp == 'o' || temp == 'u');
+    }
+    void bruteForce(string &s){
+        int size = s.size();
+        string vowels;
+        for(auto &it : s){
+            if(isVowel(it)) vowels.push_back(it);
+        }
+        sort(vowels.begin(), vowels.end());
+
+        int ptr = 0;
+        for(int ind = 0; ind < size; ind++){
+            if(isVowel(s[ind])) s[ind] = vowels[ptr++];
+        }
+    }
+    void optimal(string &s){
+        unordered_map<char, int> hashMap;
+        string vowels = "AEIOUaeiou";
+        int ptr = 0, size = s.size();
+
+        for(auto &it : s){
+            if(isVowel(it)) hashMap[it]++;
+        }
+        for(int ind = 0; ind < size; ind++){
+            if(isVowel(s[ind])){
+                while(hashMap[vowels[ptr]]== 0) ptr++;
+                s[ind] = vowels[ptr];
+                hashMap[vowels[ptr]]--;
+            }
+        }
+    }
+public:
+    string sortVowels(string s) {
+        //bruteForce(s);
+        optimal(s);
+        return s;
+    }
+};

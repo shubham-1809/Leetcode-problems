@@ -1,0 +1,13 @@
+class Solution {
+public:
+    string findDifferentBinaryString(vector<string>& nums) {
+        int size = nums.size();
+        string result;
+
+        for(int ind = 0; ind < size; ind++){
+            char ch = nums[ind][ind];
+            result += ch == '1' ? "0" : "1";
+        }
+        return result;
+    }
+};

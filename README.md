@@ -26,3 +26,7 @@
   <li> Disjoint Set Union (DSU) - for Dynamic Graphs </li>
 </ul>
 
+![leetcode-readme](https://github.com/shubham-1809/Leetcode-problems/assets/135697559/f56e5b2b-6fd0-43cf-9576-ed18d66be0d9)    ![leetcode_readme2](https://github.com/shubham-1809/Leetcode-problems/assets/135697559/2f43c804-e33f-4877-b6c1-74140c5867a9)
+
+
+

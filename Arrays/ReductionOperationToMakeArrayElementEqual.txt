@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int reductionOperations(vector<int>& nums) {
+        int size = nums.size(), ops = 0;
+        sort(nums.begin(), nums.end());
+
+        for(int ind = size - 1; ind > 0; ind--){
+            if(nums[ind] == nums[ind - 1]) continue;
+            ops += size - ind;
+        }
+        return ops;
+    }
+};

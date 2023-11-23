@@ -1,0 +1,56 @@
+class Solution {
+    bool checkValidity(vector<int> &temp){
+        sort(temp.begin(), temp.end());
+        int size = temp.size(), commonDifference = temp[1] - temp[0];
+
+        for(int ind = 2; ind < size; ind++){
+            if(temp[ind] - temp[ind - 1] != commonDifference) return false;
+        }
+        return true;
+    }
+    vector<bool> bruteForce(vector<int>& nums, vector<int>& l, vector<int>& r){
+        int size = l.size();
+        vector<bool> ans;
+
+        for(int ind = 0; ind < size; ind++){
+            int left = l[ind], right = r[ind];
+            vector<int> temp(nums.begin() + left, nums.begin() + right + 1);
+            ans.push_back(checkValidity(temp));
+        }
+        return ans;
+    }
+    bool checkValidityOptimal(vector<int> &temp){
+        int size = temp.size(), maxi = INT_MIN, mini = INT_MAX;
+        unordered_set<int> hashSet;
+
+        for(int &it : temp){
+            maxi = max(maxi, it);
+            mini = min(mini, it);
+            hashSet.insert(it);
+        }
+        if((maxi - mini) % (size - 1) != 0) return false;
+        int commonDifference = (maxi - mini) / (size - 1), currVal = mini + commonDifference;
+
+        while(currVal < maxi){
+            if(hashSet.find(currVal) == hashSet.end()) return false;
+            currVal += commonDifference;
+        }
+        return true;
+    }
+    vector<bool> optimal(vector<int>& nums, vector<int>& l, vector<int>& r){
+        int size = l.size();
+        vector<bool> ans;
+
+        for(int ind = 0; ind < size; ind++){
+            int left = l[ind], right = r[ind];
+            vector<int> temp(nums.begin() + left, nums.begin() + right + 1);
+            ans.push_back(checkValidityOptimal(temp));
+        }
+        return ans;
+    }
+public:
+    vector<bool> checkArithmeticSubarrays(vector<int>& nums, vector<int>& l, vector<int>& r) {
+        //return bruteForce(nums, l, r);
+        return optimal(nums, l, r);
+    }
+};

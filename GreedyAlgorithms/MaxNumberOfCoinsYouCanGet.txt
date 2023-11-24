@@ -1,0 +1,27 @@
+class Solution {
+    int approachOne(vector<int>& piles){
+        int size = piles.size(), bob = 0, me = size - 2, alice = size - 1, cnt = 0;
+        sort(piles.begin(), piles.end());
+
+        while(me > bob){
+            cnt += piles[me];
+            me -= 2;
+            alice -= 2;
+            bob++;
+        }
+        return cnt;
+    }
+    int approachTwo(vector<int>& piles){
+        int size = piles.size(), cnt = 0, me = size / 3;
+        sort(piles.begin(), piles.end());
+
+        for(; me < size; me += 2) cnt += piles[me];
+        return cnt;
+    }
+public:
+    int maxCoins(vector<int>& piles) {
+        //return approachOne(piles);
+        return approachTwo(piles);
+        // both approach has time complexity but second approach intuition is very good, which is built on top of approach one
+    }
+};

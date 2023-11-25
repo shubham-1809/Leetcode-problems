@@ -1,0 +1,47 @@
+class Solution {
+    vector<int> bruteForce(vector<int> &nums){
+        int size = nums.size(), currSum;
+        vector<int> result;
+
+        for(int first = 0; first < size; first++){
+            currSum = 0;
+            for(int second = 0; second < size; second++){
+                if(first != second) currSum += abs(nums[first] - nums[second]);
+            }
+            result.push_back(currSum);
+        }
+        return result;
+    }
+    vector<int> better(vector<int> &nums){
+        int size = nums.size();
+        vector<int> result(size), prefixSum(size);
+        prefixSum[0] = nums[0];
+
+        for(int ind = 1; ind < size; ind++) prefixSum[ind] = prefixSum[ind - 1] + nums[ind];
+        for(int ind = 0; ind < size; ind++){
+            int leftSum = prefixSum[ind] - nums[ind];
+            int rightSum = prefixSum[size - 1] - prefixSum[ind];
+            result[ind] = nums[ind] * ind - leftSum + rightSum - nums[ind] * (size - ind - 1);
+        }
+        return result;
+    }
+    vector<int> optimal(vector<int> &nums){
+        int size = nums.size();
+        vector<int> result(size);
+        int totSum = accumulate(nums.begin(), nums.end(), 0), prefixSum = 0;
+
+        for(int ind = 0; ind < size; ind++){
+            int leftSum = prefixSum;
+            int rightSum = totSum - prefixSum - nums[ind];
+            result[ind] = nums[ind] * ind - leftSum + rightSum - nums[ind] * (size - ind - 1);
+            prefixSum += nums[ind];
+        }
+        return result;
+    }
+public:
+    vector<int> getSumAbsoluteDifferences(vector<int>& nums) {
+        //return bruteForce(nums);
+        //return better(nums);
+        return optimal(nums);
+    }
+};

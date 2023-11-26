@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int longestPalindrome(string s) {
+        int size = s.size(), ans = 0, isOdd = 0;
+        vector<int> lowerCase(26, 0), upperCase(26, 0);
+
+        for(int ind = 0; ind < size; ind++){
+            if(s[ind] >= 'a') lowerCase[s[ind] - 'a']++;
+            else upperCase[s[ind] - 'A']++;
+        }
+        for(int ind = 0; ind < 26; ind++){
+            if(lowerCase[ind] % 2 == 0) ans += lowerCase[ind];
+            else{
+                ans += lowerCase[ind] - 1;
+                isOdd = 1;
+            }
+            if(upperCase[ind] % 2 == 0) ans += upperCase[ind];
+            else{
+                ans += upperCase[ind] - 1;
+                isOdd = 1;
+            }
+        }
+        return ans + isOdd;
+    }
+};

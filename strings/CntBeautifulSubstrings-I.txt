@@ -1,0 +1,22 @@
+class Solution {
+    int bruteForce(string &s, int &k){
+        int size = s.size(), cntVowel, cntConsonent, ans = 0;
+
+        for(int first = 0; first < size; first++){
+            cntVowel = cntConsonent = 0;
+            for(int second = first; second < size; second++){
+                if(s[second] == 'a' || s[second] == 'e' || s[second] == 'i' || s[second] == 'o' || s[second] == 'u'){
+                    cntVowel++;
+                }
+                else cntConsonent++;
+
+                if(cntVowel == cntConsonent && (cntVowel * cntConsonent) % k == 0) ans++;
+            }
+        }
+        return ans;
+    }
+public:
+    int beautifulSubstrings(string s, int k) {
+        return bruteForce(s, k);
+    }
+};

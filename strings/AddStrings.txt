@@ -1,0 +1,31 @@
+class Solution {
+    string add(string &num1, int &size1, string &num2, int size2){
+        int ind1 = size1 - 1, ind2 = size2 - 1, carry = 0;
+        string ans;
+
+        while(ind2 >= 0){
+            int totSum = num1[ind1] - '0' + num2[ind2] - '0' + carry;
+            char ch = totSum % 10 + '0';
+            carry = totSum / 10;
+            ans += ch;
+            ind1--; ind2--;
+        }
+        while(ind1 >= 0){
+            int totSum = num1[ind1] - '0' + carry;
+            char ch = totSum % 10 + '0';
+            carry = totSum / 10;
+            ans += ch;
+            ind1--;
+        }
+        if(carry) ans += '1';
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+public:
+    string addStrings(string num1, string num2) {
+        int size1 = num1.size(), size2 = num2.size();
+
+        if(size1 > size2) return add(num1, size1, num2, size2);
+        return add(num2, size2, num1, size1);
+    }
+};

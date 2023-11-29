@@ -1,0 +1,38 @@
+class Solution {
+    int approach_one(uint32_t n){
+        int cnt = 0;
+
+        for(int val = 31; val >= 0; val--){
+            if(n & 1 == 1) cnt++;
+            n = n >> 1;
+        }
+        return cnt;
+    }
+    int approach_two(uint32_t n){
+        // we can use a technique to unset the right most bit from 1 to 0 and can count the number of 1's till th entire number becomes 0
+        // todo this just AND the number with number - 1 ----> remember this technique
+        int cnt = 0;
+
+        while(n){
+            n = n & (n - 1);
+            cnt++;
+        }
+        return cnt;
+    }
+    int approach_three(uint32_t n){
+        int cnt = 0;
+
+        while(n){
+            cnt += n % 2;
+            n >>= 1;
+        }
+        return cnt;
+    }
+public:
+    int hammingWeight(uint32_t n) {
+        //return approach_one(n);
+        //return approach_two(n);
+        //return approach_three(n);
+        return __builtin_popcount(n);
+    }
+};

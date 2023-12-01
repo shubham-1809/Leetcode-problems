@@ -1,0 +1,36 @@
+class Solution {
+    bool approach_one(vector<string>& word1, vector<string>& word2){
+        int size1 = word1.size(), size2 = word2.size();
+        string first, second;
+
+        for(auto &it : word1) first += it;
+        for(auto &it : word2) second += it;
+
+        return first == second;
+    }
+    bool approach_two(vector<string>& word1, vector<string>& word2){
+        int size1 = word1.size(), size2 = word2.size();
+        int first = 0, second = 0, ind1 = 0, ind2 = 0;
+
+        while(first < size1 && second < size2){
+            if(word1[first][ind1] != word2[second][ind2]) return false;
+
+            ind1++; ind2++;
+            if(ind1 >= word1[first].size()){
+                first++;
+                ind1 = 0;
+            }
+            if(ind2 >= word2[second].size()){
+                second++;
+                ind2 = 0;
+            }
+        }
+        if((first < size1 && second >= size2) || (first >= size1 && second < size2)) return false;
+        return true;
+    }
+public:
+    bool arrayStringsAreEqual(vector<string>& word1, vector<string>& word2) {
+        //return approach_one(word1, word2);
+        return approach_two(word1, word2);
+    }
+};

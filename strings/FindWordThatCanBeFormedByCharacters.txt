@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int countCharacters(vector<string>& words, string chars) {
+        vector<int> charCnt(26, 0);
+
+        for(auto &it : chars) charCnt[it - 'a']++;
+        int result = 0;
+
+        for(auto &it : words){
+            vector<int> wordCnt(26, 0);
+            for(auto &character : it) wordCnt[character - 'a']++;
+
+            bool isPossible = true;
+            for(int ind = 0; ind < 26; ind++){
+                if(wordCnt[ind] > charCnt[ind]){
+                    isPossible = false;
+                    break;
+                }
+            }
+            if(isPossible) result += it.size();
+        }
+        return result;
+    }
+};

@@ -1,0 +1,17 @@
+class Solution {
+public:
+    // it's a good question on mathematics and diagram observation --> do revise it every time
+    int minTimeToVisitAllPoints(vector<vector<int>>& points) {
+        int size = points.size(), minTime = 0;
+
+        for(int ind = 0; ind < size - 1; ind++){
+            int x1 = points[ind][0], y1 = points[ind][1];
+            int x2 = points[ind + 1][0], y2 = points[ind + 1][1];
+
+            int dy = abs(y2 - y1), dx = abs(x2 - x1);
+
+            minTime += min(dy, dx) + abs(dy - dx);
+        }
+        return minTime;
+    }
+};

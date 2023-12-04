@@ -1,0 +1,13 @@
+class Solution {
+public:
+    string largestGoodInteger(string num) {
+        int size = num.size();
+        char maxChar = ' ';
+
+        for(int ind = 2; ind < size; ind++){
+            if(num[ind] == num[ind - 1] && num[ind] == num[ind - 2]) maxChar = max(maxChar, num[ind]);
+        }
+        if(maxChar == ' ') return "";
+        return string(3, maxChar);
+    }
+};

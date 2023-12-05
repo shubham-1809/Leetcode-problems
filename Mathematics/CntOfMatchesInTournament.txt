@@ -1,0 +1,22 @@
+class Solution {
+    int bruteForce(int &n){
+        int matches = 0;
+
+        while(n > 1){
+            if(n % 2 == 1){
+                matches += (n - 1) / 2;
+                n = (n - 1) / 2 + 1;
+            }
+            else{
+                matches += n / 2;
+                n /= 2;
+            }
+        }
+        return matches;
+    }
+public:
+    int numberOfMatches(int n) {
+        //return bruteForce(n);
+        return n - 1; // optimal --> total n - 1 teams will be eliminated and only 1 team will be winner so number of matches played will be n - 1 then only n - 1 teams will be eliminated
+    }
+};

@@ -1,0 +1,39 @@
+class Solution {
+public:
+    // 0101010101.....
+    // 1010101010....
+    int approach_one(string &s){
+        int size = s.size();
+        int start_with_0 = 0, start_with_1 = 0;
+
+        for(int ind = 0; ind < size; ind++){
+            if(ind % 2 == 0){
+                if(s[ind] == '0') start_with_1++;
+                else start_with_0++;
+            }
+            else{
+                if(s[ind] == '1') start_with_1++;
+                else start_with_0++;
+            }
+        }
+        return min(start_with_0, start_with_1);
+    }
+    int approach_two(string &s){
+        int size = s.size();
+        int start_with_0 = 0;
+
+        for(int ind = 0; ind < size; ind++){
+            if(ind % 2 == 0){
+                if(s[ind] == '0') start_with_0++;
+            }
+            else{
+                if(s[ind] == '1') start_with_0++;
+            }
+        }
+        return min(start_with_0, size - start_with_0);
+    }
+    int minOperations(string s) {
+        //return approach_one(s);
+        return approach_two(s);
+    }
+};

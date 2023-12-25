@@ -1,0 +1,68 @@
+class Solution {
+    int recursion(int ind, int &size, string &s){
+        if(ind == size) return 1;
+        if(s[ind] == '0') return 0;
+
+        int choiceOne = recursion(ind + 1, size, s);
+        int choiceTwo = 0;
+        if(ind + 1 < size){
+            if(s[ind] == '1' || (s[ind] == '2' && s[ind + 1] <= '6')) choiceTwo = recursion(ind + 2, size, s);
+        }
+        return choiceOne + choiceTwo;
+    }
+    int memoize(int ind, int &size, string &s, vector<int> &dp){
+        if(ind == size) return 1;
+        if(s[ind] == '0') return 0;
+        if(dp[ind] != -1) return dp[ind];
+
+        int choiceOne = memoize(ind + 1, size, s, dp);
+        int choiceTwo = 0;
+        if(ind + 1 < size){
+            if(s[ind] == '1' || (s[ind] == '2' && s[ind + 1] <= '6')) choiceTwo = memoize(ind + 2, size, s, dp);
+        }
+        return dp[ind] = choiceOne + choiceTwo;
+    }
+    int tabulation(string &s, int &size){
+        vector<int> dp(size + 1, 0);
+        dp[size] = 1;
+        int choiceOne, choiceTwo;
+        for(int ind = size - 1; ind >= 0; ind--){
+            if(s[ind] == '0') dp[ind] = 0;
+            else{
+                choiceOne = dp[ind + 1];
+                choiceTwo = 0;
+                if(ind + 1 < size){
+                    if(s[ind] == '1' || (s[ind] == '2' && s[ind + 1] <= '6')) choiceTwo = dp[ind + 2];
+                }
+                dp[ind] = choiceOne + choiceTwo;
+            }
+        }
+        return dp[0];
+    }
+    int spaceOptimization(string &s, int &size){
+        int choiceOne, choiceTwo, curr, aheadOne = 1, aheadTwo = 0;
+        for(int ind = size - 1; ind >= 0; ind--){
+            if(s[ind] == '0') curr = 0;
+            else{
+                choiceOne = aheadOne;
+                choiceTwo = 0;
+                if(ind + 1 < size){
+                    if(s[ind] == '1' || (s[ind] == '2' && s[ind + 1] <= '6')) choiceTwo = aheadTwo;
+                }
+                curr = choiceOne + choiceTwo;
+            }
+            aheadTwo = aheadOne;
+            aheadOne = curr;
+        }
+        return curr;   // you can either return curr or aheadOne
+    }
+public:
+    int numDecodings(string s) {
+        int size = s.size();
+        //return recursion(0, size, s);
+        //vector<int> dp(size + 1, -1);
+        //return memoize(0, size, s, dp);
+        //return tabulation(s, size);
+        return spaceOptimization(s, size);
+    }
+};

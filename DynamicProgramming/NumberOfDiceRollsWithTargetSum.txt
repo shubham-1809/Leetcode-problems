@@ -1,0 +1,47 @@
+class Solution {
+    int mod = 1e9 + 7;
+    int recursion(int n, int k, int target){
+        if(target < 0) return 0;
+        if(n == 0) return target == 0;
+
+        int ways = 0;
+        for(int num = 1; num <= k; num++){
+            ways = (ways + recursion(n - 1, k, target - num)) % mod; 
+        }
+        return ways;
+    }
+    int memoize(int n, int k, int target, vector<vector<int>> &dp){
+        if(target < 0) return 0;
+        if(n == 0) return target == 0;
+        if(dp[n][target] != -1) return dp[n][target];
+
+        int ways = 0;
+        for(int num = 1; num <= k; num++){
+            ways = (ways + memoize(n - 1, k, target - num, dp)) % mod; 
+        }
+        return dp[n][target] = ways;
+    }
+    int tabulation(int n, int k, int target){
+        vector<vector<int>> dp(n + 1, vector<int>(target + 1, 0));
+        dp[0][0] = 1;
+
+        for(int dice = 1; dice <= n; dice++){
+            for(int tar = 1; tar <= target; target++){
+                int ways = 0;
+                for(int num = 1; num <= k; num++){
+                    if(num <= tar)
+                        ways = (ways + dp[dice - 1][tar - num]) % mod; 
+                }
+                dp[dice][tar] = ways;
+            }
+        }
+        return dp[n][target];
+    }
+public:
+    int numRollsToTarget(int n, int k, int target) {
+        //return recursion(n, k, target);
+        //vector<vector<int>> dp(n + 1, vector<int>(target + 1, -1));
+        //return memoize(n, k, target, dp);
+        return tabulation(n, k, target); // try to solve using tabulation, giving TLE
+    }
+};

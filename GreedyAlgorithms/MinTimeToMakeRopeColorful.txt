@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int minCost(string colors, vector<int>& neededTime) {
+        int size = colors.size(), prevMax = 0, time = 0;
+
+        for(int ind = 0; ind < size; ind++){
+            if(ind > 0 && colors[ind] != colors[ind - 1]) prevMax = 0;
+            time += min(prevMax, neededTime[ind]);
+            prevMax = max(prevMax, neededTime[ind]);
+        }
+        return time;
+    }
+};

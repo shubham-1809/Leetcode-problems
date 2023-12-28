@@ -1,0 +1,43 @@
+int dp[101][27][101][101]; // allocate this 4D array in heap section only, if declared inside class or function memory overflow will occur for such a huge space
+
+class Solution {
+    int recursion(string &s, int ind, int prev_char, int freq, int k){
+        if(k < 0) return INT_MAX;
+        if(ind >= s.size()) return 0;
+
+        int delete_choice = recursion(s, ind + 1, prev_char, freq, k - 1);
+        int not_delete_choice = 0;
+        if(s[ind] - 'a' != prev_char){
+            not_delete_choice = 1 + recursion(s, ind + 1, s[ind] - 'a', 1, k);
+        }
+        else{
+            int run_len_encoding = 0;
+            if(freq == 1 || freq == 9 || freq == 99) run_len_encoding = 1;
+            not_delete_choice = run_len_encoding + recursion(s, ind + 1, prev_char, freq + 1, k);
+        }
+        return min(delete_choice, not_delete_choice);
+    }
+    int memoize(string &s, int ind, int prev_char, int freq, int k){
+        if(k < 0) return INT_MAX;
+        if(ind >= s.size()) return 0;
+        if(dp[ind][prev_char][freq][k] != -1) return dp[ind][prev_char][freq][k];
+
+        int delete_choice = memoize(s, ind + 1, prev_char, freq, k - 1);
+        int not_delete_choice = 0;
+        if(s[ind] - 'a' != prev_char){
+            not_delete_choice = 1 + memoize(s, ind + 1, s[ind] - 'a', 1, k);
+        }
+        else{
+            int run_len_encoding = 0;
+            if(freq == 1 || freq == 9 || freq == 99) run_len_encoding = 1;
+            not_delete_choice = run_len_encoding + memoize(s, ind + 1, prev_char, freq + 1, k);
+        }
+        return dp[ind][prev_char][freq][k] = min(delete_choice, not_delete_choice);
+    }
+public:
+    int getLengthOfOptimalCompression(string s, int k) {
+        //return recursion(s, 0, 26, 0, k);
+        memset(dp, -1, sizeof(dp));
+        return memoize(s, 0, 26, 0, k);
+    }
+};

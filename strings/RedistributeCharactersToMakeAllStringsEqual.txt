@@ -1,0 +1,50 @@
+class Solution {
+    bool approachOne(vector<string> &words){
+        int size = words.size();
+        unordered_map<char, int> hashMap;
+
+        for(auto &word : words){
+            for(auto &ch : word){
+                hashMap[ch]++;
+            }
+        }
+        for(auto &freq : hashMap){
+            if(freq.second % size != 0) return false;
+        }
+        return true;
+    }
+    bool approachTwo(vector<string> &words){
+        int size = words.size();
+        int arr[26] = {0};
+
+        for(auto &word : words){
+            for(auto &ch : word){
+                arr[ch - 'a']++;
+            }
+        }
+        for(auto &freq : arr){
+            if(freq % size != 0) return false;
+        }
+        return true;
+    }
+    bool approachThree(vector<string> &words){
+        int size = words.size();
+        int arr[26] = {0};
+
+        for(auto &word : words){
+            for(auto &ch : word){
+                arr[ch - 'a']++;
+            }
+        }
+
+        return all_of(begin(arr), end(arr), [&](int freq){
+            return freq % size == 0;
+        });
+    }
+public:
+    bool makeEqual(vector<string>& words) {
+        //return approachOne(words);
+        //return approachTwo(words);
+        return approachThree(words); // uses in bult STL library with lambda function
+    }
+};

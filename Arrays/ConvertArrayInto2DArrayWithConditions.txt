@@ -1,0 +1,37 @@
+class Solution {
+    vector<vector<int>> approachOne(vector<int> &nums){
+        int size = nums.size();
+        vector<vector<int>> ans;
+        unordered_map<int, int> hashMap;
+
+        for(int ind = 0; ind < size; ind++){
+            int freq = hashMap[nums[ind]];
+            if(freq == ans.size()){
+                ans.push_back({});
+            }
+            ans[freq].push_back(nums[ind]);
+            hashMap[nums[ind]]++;
+        }
+        return ans;
+    }
+    vector<vector<int>> approachTwo(vector<int> &nums){
+        int size = nums.size();
+        vector<vector<int>> ans;
+        vector<int> hashMap(size + 1, 0);
+
+        for(int ind = 0; ind < size; ind++){
+            int freq = hashMap[nums[ind]];
+            if(freq == ans.size()){
+                ans.push_back({});
+            }
+            ans[freq].push_back(nums[ind]);
+            hashMap[nums[ind]]++;
+        }
+        return ans;
+    }
+public:
+    vector<vector<int>> findMatrix(vector<int>& nums) {
+        //return approachOne(nums);
+        return approachTwo(nums);
+    }
+};

@@ -1,0 +1,16 @@
+class Solution {
+    // very good question based on greedy and maths
+public:
+    int minOperations(vector<int>& nums) {
+        unordered_map<int, int> hashMap;
+
+        for(int &num : nums) hashMap[num]++;
+        int result = 0;
+
+        for(auto &it : hashMap){
+            if(it.second == 1) return -1;
+            result += ceil((double)it.second / 3);
+        }
+        return result;
+    }
+};

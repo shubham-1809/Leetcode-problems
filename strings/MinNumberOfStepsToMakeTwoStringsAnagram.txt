@@ -1,0 +1,41 @@
+class Solution {
+    int betterSolution(string &s, string &t){
+        int ans = 0;
+        unordered_map<char, int> hashMap;
+
+        for(char &ch : s){
+            hashMap[ch]++;
+        }
+        for(char &ch : t){
+            if(hashMap.find(ch) == hashMap.end() || hashMap[ch] == 0){
+                ans++;
+            }
+            else{
+                hashMap[ch]--;
+            }
+        }
+        return ans;
+    }
+    int optimalSolution(string &s, string &t){
+        int ans = 0;
+        int hash[26] = {0};
+
+        for(char &ch : s){
+            hash[ch - 'a']++;
+        }
+        for(char &ch : t){
+            if(hash[ch - 'a'] == 0){
+                ans++;
+            }
+            else{
+                hash[ch - 'a']--;
+            }
+        }
+        return ans;
+    }
+public:
+    int minSteps(string s, string t) {
+        //return betterSolution(s, t);
+        return optimalSolution(s, t);
+    }
+};

@@ -1,0 +1,57 @@
+class Solution {
+private:
+    int bruteForce(vector<int> &arr){
+        int size = arr.size(), mini, sum = 0, mod = 1e9 + 7;
+
+        for(int first = 0; first < size; first++){
+            mini = INT_MAX;
+            for(int second = first; second < size; second++){
+                mini = min(mini, arr[second]);
+                sum = (sum + mini) % mod;
+            }
+        }
+        return sum;
+    } 
+    vector<int> get_prev_small(vector<int> &arr, int size){
+        stack<int> st;
+        vector<int> prevSmall(size);
+
+        for(int ind = 0; ind < size; ind++){
+            while(!st.empty() && arr[st.top()] >= arr[ind]) st.pop();
+            if(st.empty()) prevSmall[ind] = -1;
+            else prevSmall[ind] = st.top();
+            st.push(ind);
+        }
+        return prevSmall;
+    }
+    vector<int> get_next_small(vector<int> &arr, int size){
+        stack<int> st;
+        vector<int> nextSmall(size);
+
+        for(int ind = size - 1; ind >= 0 ;ind--){
+            while(!st.empty() && arr[st.top()] > arr[ind]) st.pop();
+            if(st.empty()) nextSmall[ind] = size;
+            else nextSmall[ind] = st.top();
+            st.push(ind);
+        }
+        return nextSmall;
+    }
+    int optimal(vector<int> &arr){
+        int size = arr.size(), sum = 0, mod = 1e9 + 7;
+
+        vector<int> prevSmall = get_prev_small(arr, size);
+        vector<int> nextSmall = get_next_small(arr, size);
+
+        for(int ind = 0; ind < size; ind++){
+            long long ways = (ind - prevSmall[ind]) * (nextSmall[ind] - ind);
+            long long subArray_cnt = arr[ind] * ways;
+            sum = (sum + subArray_cnt) % mod;
+        }
+        return sum;
+    }   
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        //return bruteForce(arr);
+        return optimal(arr);
+    }
+};

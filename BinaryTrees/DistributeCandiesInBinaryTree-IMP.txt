@@ -1,0 +1,27 @@
+/*
+struct Node {
+	int key;
+	Node *left, *right;
+};
+*/
+
+class Solution
+{
+    int recursion(Node* root, int &moves){
+        if(!root) return 0;
+        
+        int left = recursion(root -> left, moves);
+        int right = recursion(root -> right, moves);
+        
+        moves += abs(left) + abs(right); // after getting left and right subtree answer calcluate moves, abs() is used if any node return (-)ve value that means it doesn't have extra candies and it needs atleast one candy
+        return (left + right + root -> key) - 1;
+    }
+    public:
+    int distributeCandy(Node* root)
+    {
+        //code here
+        int moves = 0;
+        recursion(root, moves);
+        return moves;
+    }
+};

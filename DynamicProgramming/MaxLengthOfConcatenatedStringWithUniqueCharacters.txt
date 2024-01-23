@@ -1,0 +1,36 @@
+class Solution {
+    bool hasDuplicate(string &first, string &second){
+        int hash[26] = {0};
+
+        for(char &it : first){
+            if(hash[it - 'a'] > 0) return true;
+            hash[it - 'a']++;
+        }
+        for(char &it : second){
+            if(hash[it - 'a'] > 0) return true;
+        }
+        return false;
+    }
+    int recursion(int ind, int &size, vector<string> &arr, string temp){
+        if(ind >= size) return temp.size();
+
+        int includeChoice, excludeChoice;
+        if(hasDuplicate(arr[ind], temp)){
+            excludeChoice = recursion(ind + 1, size, arr, temp);
+        }
+        else{
+            excludeChoice = recursion(ind + 1, size, arr, temp);
+            temp += arr[ind];
+            includeChoice = recursion(ind + 1, size, arr, temp);
+        }
+
+        return max(excludeChoice, includeChoice);
+    }
+public:
+    int maxLength(vector<string>& arr) {
+        int size = arr.size();
+        string temp = "";
+
+        return recursion(0, size, arr, temp);
+    }
+};

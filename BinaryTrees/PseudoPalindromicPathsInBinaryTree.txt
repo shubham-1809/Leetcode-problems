@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+    void approachOne(TreeNode *root, unordered_map<int, int> &hashMap, int &ans){
+        if(!root) return;
+
+        hashMap[root -> val]++;
+        approachOne(root -> left, hashMap, ans);
+        approachOne(root -> right, hashMap, ans);
+        if(!root -> left && !root -> right){
+            int cntNodes = 0;
+            for(auto &it : hashMap){
+                if(it.second % 2 == 1){
+                    cntNodes++;
+                    if(cntNodes > 1) break;
+                } 
+            }
+            if(cntNodes <= 1) ans++;
+        }
+        hashMap[root -> val]--;
+    }
+public:
+    int pseudoPalindromicPaths (TreeNode* root) {
+        int ans = 0;
+        unordered_map<int, int> hashMap;
+        approachOne(root, hashMap, ans); // atmost one node should have odd frequency for pseudo palindrome
+        return ans; // can also be solved using bit manipulation, see later bit manipulation approach
+    }
+};

@@ -1,0 +1,59 @@
+class Solution {
+    int delRow[4] = {-1, 0, 1, 0}, delCol[4] = {0, 1, 0, -1};
+    int mod = 1e9 + 7;
+
+    int recursion(int &m, int &n, int maxMove, int startRow, int startCol){
+        if(startRow < 0 || startRow >= m || startCol < 0 || startCol >= n) return 1;
+        if(maxMove <= 0) return 0;
+
+        int totPaths = 0;
+        for(int dir = 0; dir < 4; dir++){
+            int newRow = startRow + delRow[dir];
+            int newCol = startCol + delCol[dir];
+            totPaths = (totPaths + recursion(m, n, maxMove - 1, newRow, newCol)) % mod;
+        }
+        return totPaths;
+    }
+    int memoize(int &m, int &n, int maxMove, int startRow, int startCol, vector<vector<vector<int>>> &dp){
+        if(startRow < 0 || startRow >= m || startCol < 0 || startCol >= n) return 1;
+        if(maxMove <= 0) return 0;
+        if(dp[startRow][startCol][maxMove] != -1) return dp[startRow][startCol][maxMove];
+
+        int totPaths = 0;
+        for(int dir = 0; dir < 4; dir++){
+            int newRow = startRow + delRow[dir];
+            int newCol = startCol + delCol[dir];
+            totPaths = (totPaths + memoize(m, n, maxMove - 1, newRow, newCol, dp)) % mod;
+        }
+        return dp[startRow][startCol][maxMove] = totPaths;
+    }
+    int tabulation(int &m, int &n, int maxMove, int startRow, int startCol){
+        vector<vector<vector<int>>> dp(m + 1, vector<vector<int>>(n + 1, vector<int>(maxMove + 1, 0)));
+
+        for(int move = 1; move <= maxMove; move++){
+            for(int row = 0; row < m; row++){
+                for(int col = 0; col < n; col++){
+                    for(int dir = 0; dir < 4; dir++){
+                        int newRow = row + delRow[dir];
+                        int newCol = col + delCol[dir];
+
+                        if(newRow < 0 || newRow >= m || newCol < 0 || newCol >= n){
+                            dp[row][col][move] = (dp[row][col][move] + 1) % mod;
+                        }
+                        else{
+                            dp[row][col][move] = (dp[row][col][move] + dp[newRow][newCol][move - 1]) % mod;
+                        }
+                    }
+                }
+            }
+        }
+        return dp[startRow][startCol][maxMove];
+    }
+public:
+    int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+        //return recursion(m, n, maxMove, startRow, startColumn);
+        //vector<vector<vector<int>>> dp(m, vector<vector<int>>(n, vector<int>(maxMove + 1, -1)));
+        //return memoize(m, n, maxMove, startRow, startColumn, dp);
+        return tabulation(m, n, maxMove, startRow, startColumn);
+    }
+};

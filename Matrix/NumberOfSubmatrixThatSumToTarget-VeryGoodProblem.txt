@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int numSubmatrixSumTarget(vector<vector<int>>& matrix, int target) {
+        int rows = matrix.size(), cols = matrix[0].size(), result = 0;
+
+        // step 1: first find the cummulative sum row wise
+        for(int row = 0; row < rows; row++){
+            for(int col = 1; col < cols; col++){
+                matrix[row][col] += matrix[row][col - 1];
+            }
+        }
+        // step 2: move row wise by fixing each column cell and apply hashing
+        unordered_map<int, int> hashMap;
+        int currSum;
+        for(int baseCol = 0; baseCol < cols; baseCol++){
+            for(int currCol = baseCol; currCol < cols; currCol++){
+                hashMap.clear();
+                hashMap.insert({0, 1});
+                currSum = 0;
+                for(int currRow = 0; currRow < rows; currRow++){
+                    currSum += matrix[currRow][currCol] - (baseCol > 0 ? matrix[currRow][baseCol - 1] : 0);
+                    if(hashMap.find(currSum - target) != hashMap.end()) result += hashMap[currSum - target];
+                    hashMap[currSum]++;
+                }
+            }
+        }
+        return result;
+    }
+};

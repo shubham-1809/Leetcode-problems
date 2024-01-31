@@ -1,0 +1,17 @@
+class Solution {
+public:
+// this problem is similar to fining next greater element, next small elements etc patterns
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        int size = temperatures.size();
+        stack<int> st;
+        vector<int> ans(size, 0);
+
+        for(int ind = size - 1; ind >= 0; ind--){
+            while(!st.empty() && temperatures[ind] >= temperatures[st.top()]) st.pop();
+            if(st.empty()) ans[ind] = 0;
+            else ans[ind] = st.top() - ind;
+            st.push(ind);
+        }
+        return ans;
+    }
+};

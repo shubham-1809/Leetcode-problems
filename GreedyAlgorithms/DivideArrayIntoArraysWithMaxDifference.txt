@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<vector<int>> divideArray(vector<int>& nums, int k) {
+        int size = nums.size();
+        vector<vector<int>> ans;
+
+        // we are sorting because then we easilt check the difference between i, i + 1, i + 2
+        // moreover ordering is not important as well
+        sort(nums.begin(), nums.end());
+
+        for(int ind = 0; ind < size; ind += 3){
+            if(nums[ind + 2] - nums[ind] > k) return {};
+            ans.push_back({nums[ind], nums[ind + 1], nums[ind + 2]});
+        }
+        return ans;
+    }
+};

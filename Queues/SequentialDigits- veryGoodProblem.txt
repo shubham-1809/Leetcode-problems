@@ -1,0 +1,47 @@
+class Solution {
+    vector<int> bfsApproach(int &low, int &high){
+        vector<int> result;
+        queue<int> q;
+        // storing initial increasing sequential numbers from 1 - 8 in a queue and thn applying BFS logic
+        for(int num = 1; num < 9; num++) q.push(num);
+        while(!q.empty()){
+            int frontVal = q.front();
+            q.pop();
+
+            if(frontVal > high) break;
+            if(frontVal >= low && frontVal <= high) result.push_back(frontVal);
+            int lastDigit = frontVal % 10;
+            // after digit 9 we can't get next increasing sequential number
+            if(lastDigit == 9) continue;
+            q.push(frontVal * 10 + lastDigit + 1);
+        }
+        return result;
+    }
+    vector<int> approachTwo(int &low, int &high){
+        vector<int> result;
+        // here we know only these sequential number will be our answers
+        vector<int> possibleOutcomes = {
+            12, 23, 34, 45, 56, 67, 78, 89,
+            123, 234, 345, 456, 567, 678, 789,
+            1234, 2345, 3456, 4567, 5678, 6789,
+            12345, 23456, 34567, 45678, 56789,
+            123456, 234567, 345678, 456789,
+            1234567, 2345678, 3456789,
+            12345678, 23456789,
+            123456789
+        };
+        int size = possibleOutcomes.size();
+
+        for(int ind = 0; ind < size; ind++){
+            if(possibleOutcomes[ind] < low) continue;
+            if(possibleOutcomes[ind] > high) break;
+            result.push_back(possibleOutcomes[ind]);
+        }
+        return result;
+    }
+public:
+    vector<int> sequentialDigits(int low, int high) {
+        //return bfsApproach(low, high);
+        return approachTwo(low, high);
+    }
+};

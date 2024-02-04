@@ -1,0 +1,29 @@
+class Solution {
+public:
+    // very hard, requires alot of intuition and how to move 2 pointers first and second inside sliding window
+    string minWindow(string s, string t) {
+        int s_size = s.size(), t_size = t.size();
+        if(t_size > s_size) return "";
+
+        unordered_map<char, int> hashMap;
+        for(char &ch : t) hashMap[ch]++;
+
+        int first = 0, second = 0, requiredCnt = t_size, startInd = 0, minWindowSize = INT_MAX;
+        while(second < s_size){
+            if(hashMap[s[second]] > 0) requiredCnt--;
+            hashMap[s[second]]--;
+            
+            while(requiredCnt == 0){
+                if(minWindowSize > second - first + 1){
+                    minWindowSize = second - first + 1;
+                    startInd = first;
+                }
+                hashMap[s[first]]++;
+                if(hashMap[s[first]] > 0) requiredCnt++;
+                first++;
+            }
+            second++;
+        }
+        return minWindowSize == INT_MAX ? "" : s.substr(startInd, minWindowSize);
+    }
+};

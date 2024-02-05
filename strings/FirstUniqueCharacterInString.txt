@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        int size = s.size();
+        int freq[26] = {0};
+
+        for(int ind = 0; ind < size; ind++) freq[s[ind] - 'a']++;
+        for(int ind = 0; ind < size; ind++){
+            if(freq[s[ind] - 'a'] == 1) return ind;
+        }
+        return -1;
+    }
+};

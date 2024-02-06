@@ -1,0 +1,25 @@
+ Solution
+{
+    void callDfs(Node* root, int &k, int ind, vector<Node*> &temp, unordered_set<Node*> &hashSet){
+        if(!root) return;
+        
+        temp.push_back(root);
+        if(!root -> left && !root -> right){
+            if(ind - k >= 0) hashSet.insert(temp[ind - k]);
+        }
+        callDfs(root -> left, k, ind + 1, temp, hashSet);
+        callDfs(root -> right, k, ind + 1, temp, hashSet);
+        temp.pop_back();
+    }
+    public:
+    //Function to return count of nodes at a given distance from leaf nodes.
+    int printKDistantfromLeaf(Node* root, int k)
+    {
+    	//Add your code here. 
+    	unordered_set<Node*> hashSet;
+    	vector<Node*> temp;
+    	
+    	callDfs(root, k, 0, temp, hashSet);
+    	return hashSet.size();
+    }
+};

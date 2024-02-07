@@ -1,0 +1,29 @@
+class Solution {
+    string approachOne(string &s){
+        vector<pair<char, int>> vec(123);
+        string ans = "";
+
+        for(char &ch : s){
+            int freq = vec[ch].second; // doubt in this line 
+            vec[ch] = {ch, freq + 1};
+        }
+        auto compare = [&](pair<char, int> &p1, pair<char, int> &p2){
+            return p1.second > p2.second;
+        };
+        sort(vec.begin(), vec.end(), compare);
+
+        for(int ind = 0; ind < 123; ind++){
+            if(vec[ind].second > 0){
+                int freq = vec[ind].second;
+                char ch = vec[ind].first;
+                string temp = string(freq, ch);
+                ans += temp;
+            }
+        }
+        return ans;
+    }
+public:
+    string frequencySort(string s) {
+        return approachOne(s);
+    }
+};

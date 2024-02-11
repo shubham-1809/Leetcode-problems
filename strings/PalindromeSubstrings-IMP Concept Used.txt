@@ -1,0 +1,21 @@
+class Solution {
+    int getCnt(int left, int right, string &s, int &size){
+        int cnt = 0;
+        while(left >= 0 && right < size && s[left--] == s[right++]) cnt++;
+        return cnt;
+    }
+    int approachOne(string &s){
+        int size = s.size(), cnt = 0;
+
+        for(int ind = 0; ind < size; ind++){
+            int evenCnt = getCnt(ind, ind + 1, s, size);
+            int oddCnt = getCnt(ind, ind, s, size);
+            cnt += evenCnt + oddCnt;
+        }
+        return cnt;
+    }
+public:
+    int countSubstrings(string s) {
+        return approachOne(s);
+    }
+};

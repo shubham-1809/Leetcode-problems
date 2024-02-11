@@ -1,0 +1,114 @@
+class Solution {
+    int recursion(int row, int col1, int col2, int &n, int &m, vector<vector<int>>& grid){
+        if(col1 < 0 || col1 >= m || col2 < 0 || col2 >= m) return -1e9;
+        if(row == n - 1){
+            if(col1 == col2) return grid[row][col1];
+            return grid[row][col1] + grid[row][col2];
+        }
+
+        int maxCherry = INT_MIN;
+        for(int dir1 = -1; dir1 <= 1; dir1++){
+            int val = 0;
+            for(int dir2 = -1; dir2 <= 1; dir2++){
+                if(col1 == col2) val = grid[row][col1];
+                else val = grid[row][col1] + grid[row][col2];
+                val += recursion(row + 1, col1 + dir1, col2 + dir2, n, m, grid);
+                maxCherry = max(maxCherry, val);
+            }
+        }
+        return maxCherry;
+    }
+    int memoize(int row, int col1, int col2, int &n, int &m, vector<vector<int>>& grid, vector<vector<vector<int>>> &dp){
+        if(col1 < 0 || col1 >= m || col2 < 0 || col2 >= m) return -1e9;
+        if(row == n - 1){
+            if(col1 == col2) return grid[row][col1];
+            return grid[row][col1] + grid[row][col2];
+        }
+        if(dp[row][col1][col2] != -1) return dp[row][col1][col2];
+
+        int maxCherry = INT_MIN;
+        for(int dir1 = -1; dir1 <= 1; dir1++){
+            int val = 0;
+            for(int dir2 = -1; dir2 <= 1; dir2++){
+                if(col1 == col2) val = grid[row][col1];
+                else val = grid[row][col1] + grid[row][col2];
+                val += memoize(row + 1, col1 + dir1, col2 + dir2, n, m, grid, dp);
+                maxCherry = max(maxCherry, val);
+            }
+        }
+        return dp[row][col1][col2] = maxCherry;
+    }
+    int tabulation(int &n, int &m, vector<vector<int>>& grid){
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(m, vector<int>(m, 0)));
+
+        for(int col1 = 0; col1 < m; col1++){
+            for(int col2 = 0; col2 < m; col2++){
+                if(col1 == col2) dp[n - 1][col1][col2] = grid[n - 1][col1];
+                else dp[n - 1][col1][col2] = grid[n - 1][col1] + grid[n - 1][col2];
+            }
+        }
+
+        for(int row = n - 2; row >= 0; row--){
+            for(int col1 = 0; col1 < m; col1++){
+                for(int col2 = 0; col2 < m; col2++){
+                    int maxCherry = INT_MIN;
+                    for(int dir1 = -1; dir1 <= 1; dir1++){
+                        int val = 0;
+                        for(int dir2 = -1; dir2 <= 1; dir2++){
+                            if(col1 == col2) val = grid[row][col1];
+                            else val = grid[row][col1] + grid[row][col2];
+                            if(col1 + dir1 >= 0 && col1 + dir1 < m && col2 + dir2 >= 0 && col2 + dir2 < m)
+                                val += dp[row + 1][col1 + dir1][col2 + dir2];
+                            else val += -1e9;    
+                            maxCherry = max(maxCherry, val);
+                        }
+                    }
+                dp[row][col1][col2] = maxCherry;
+                }
+            }
+        }
+        return dp[0][0][m - 1];
+    }
+    int spaceOptimization(int &n, int &m, vector<vector<int>>& grid){
+        vector<vector<int>> curr(m, vector<int> (m, 0)), next(m, vector<int> (m, 0));
+
+        for(int col1 = 0; col1 < m; col1++){
+            for(int col2 = 0; col2 < m; col2++){
+                if(col1 == col2) next[col1][col2] = grid[n - 1][col1];
+                else next[col1][col2] = grid[n - 1][col1] + grid[n - 1][col2];
+            }
+        } 
+        for(int row = n - 2; row >= 0; row--){
+            for(int col1 = 0; col1 < m; col1++){
+                for(int col2 = 0; col2 < m; col2++){
+                    int maxCherry = INT_MIN;
+                    for(int dir1 = -1; dir1 <= 1; dir1++){
+                        int val = 0;
+                        for(int dir2 = -1; dir2 <= 1; dir2++){
+                            if(col1 == col2) val = grid[row][col1];
+                            else val = grid[row][col1] + grid[row][col2];
+                            if(col1 + dir1 >= 0 && col1 + dir1 < m && col2 + dir2 >= 0 && col2 + dir2 < m)
+                                val += next[col1 + dir1][col2 + dir2];
+                            else val += -1e9;    
+                            maxCherry = max(maxCherry, val);
+                        }
+                    }
+                curr[col1][col2] = maxCherry;
+                }
+            }
+            next = curr;
+        }
+        return curr[0][m - 1];       
+    }
+public:
+    int cherryPickup(vector<vector<int>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+        // since both robots move to next row at same time, so we have only considered one row as changing parameter
+        
+        //return recursion(0, 0, m - 1, n, m, grid);
+        //vector<vector<vector<int>>> dp(n, vector<vector<int>>(m, vector<int>(m, -1)));
+        //return memoize(0, 0, m - 1, n, m, grid, dp);
+        //return tabulation(n, m, grid);
+        return spaceOptimization(n, m, grid);
+    }
+};

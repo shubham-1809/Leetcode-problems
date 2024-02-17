@@ -1,0 +1,89 @@
+class Solution {
+    int recursion(int ind, vector<int>& heights, int bricks, int ladders, int &size){
+        // base cases
+        if(bricks <= 0 && ladders <= 0){
+            return heights[ind] >= heights[ind + 1] ? recursion(ind + 1, heights, bricks, ladders, size) : ind;
+        }
+        if(ind == size - 1) return ind;
+
+        //choice 1: no need to take ladder or bricks
+        if(heights[ind] >= heights[ind + 1]) return recursion(ind + 1, heights, bricks, ladders, size);
+        
+        // choice 2: we can use ladder only
+        int usingLadders = INT_MIN;
+        if(ladders > 0) usingLadders = recursion(ind + 1, heights, bricks, ladders - 1, size);
+        // choice 3: we can use brick only
+        int usingBricks = INT_MIN;
+        if(bricks >= heights[ind + 1] - heights[ind]){
+            int requiredBricks = bricks - (heights[ind + 1] - heights[ind]);
+            usingBricks = recursion(ind + 1, heights, requiredBricks, ladders, size);
+        }
+        // return maximum of choice 2, choice 3 and current index
+        return max(ind, max(usingLadders, usingBricks));
+    }
+    int memoize(int ind, vector<int>& heights, int bricks, int ladders, int &size, vector<vector<vector<int>>> &dp){
+        // base cases
+        if(bricks <= 0 && ladders <= 0){
+            return heights[ind] >= heights[ind + 1] ? recursion(ind + 1, heights, bricks, ladders, size) : ind;
+        }
+        if(ind == size - 1) return ind;
+        if(dp[ind][bricks][ladders] != -1) return dp[ind][bricks][ladders];
+
+        //choice 1: no need to take ladder or bricks
+        if(heights[ind] >= heights[ind + 1]) return memoize(ind + 1, heights, bricks, ladders, size, dp);
+        
+        // choice 2: we can use ladder only
+        int usingLadders = INT_MIN;
+        if(ladders > 0) usingLadders = memoize(ind + 1, heights, bricks, ladders - 1, size, dp);
+        // choice 3: we can use brick only
+        int usingBricks = INT_MIN;
+        if(bricks >= heights[ind + 1] - heights[ind]){
+            int requiredBricks = bricks - (heights[ind + 1] - heights[ind]);
+            usingBricks = memoize(ind + 1, heights, requiredBricks, ladders, size, dp);
+        }
+        // return maximum of choice 2, choice 3 and current index
+        return dp[ind][bricks][ladders] = max(ind, max(usingLadders, usingBricks));
+    }
+    int optimalApproach(vector<int>& heights, int bricks, int ladders){
+       int n = heights.size();
+    
+        priority_queue<int> pq;
+        
+        int i = 0;
+        for(;i < n-1;i++) {
+            if(heights[i] >= heights[i+1]) {
+                continue;
+            }
+            
+            int diff = heights[i+1]-heights[i];
+            if(diff <= bricks) {
+                bricks -= diff;
+                pq.push(diff); //I used diff bricks here (keep track of it)
+            } else if(ladders > 0) {
+                if(!pq.empty()) {
+                    int max_bricks_past = pq.top();
+                    if(max_bricks_past > diff) {
+                        //it means i unneccasrily used huge bricks in past. Let's get it back
+                        bricks += max_bricks_past;
+                        pq.pop();
+                        pq.push(diff);
+                        bricks -= diff;
+                    }
+                }
+                ladders--; //either used in past or present
+            } else {
+                break;
+            }
+        }
+        return i;
+    }
+public:
+    int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
+        int size = heights.size();
+
+        //return recursion(0, heights, bricks, ladders, size);
+        //vector<vector<vector<int>>> dp(size, vector<vector<int>>(bricks + 1, vector<int>(ladders + 1, -1)));
+        //return memoize(0, heights, bricks, ladders, size, dp);
+        return optimalApproach(heights, bricks, ladders);
+    }
+};

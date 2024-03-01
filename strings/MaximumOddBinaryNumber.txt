@@ -1,0 +1,28 @@
+class Solution {
+    string approachOne(string &s){
+        int size = s.size();
+        string ans = string(size, '0');
+        int ind = 0;
+
+        for(auto &it : s){
+            if(it == '1'){
+                if(ans[size - 1] == '1') ans[ind++] = it;
+                else ans[size - 1] = it;
+            }
+        }
+        return ans;
+    }
+    string approachTwo(string &s){
+        int cntOnes = count(s.begin(), s.end(), '1'), ptr = 0, size = s.size();
+        string ans = string(size, '0');
+
+        while(cntOnes-- > 1) ans[ptr++] = '1';
+        ans[size - 1] = '1';
+        return ans;
+    }
+public:
+    string maximumOddBinaryNumber(string s) {
+        //return approachOne(s);
+        return approachTwo(s);
+    }
+};

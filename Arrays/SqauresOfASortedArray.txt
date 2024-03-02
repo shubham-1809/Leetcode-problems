@@ -1,0 +1,25 @@
+class Solution {
+    vector<int> approachOne(vector<int> &nums){
+        vector<int> ans;
+
+        for(int &num : nums) ans.push_back(num * num);
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+    vector<int> approachTwo(vector<int> &nums){
+        int size = nums.size(), first = 0, second, ind;
+        second = ind = size - 1;
+        vector<int> ans(size, 0);
+
+        while(first <= second){
+            if(abs(nums[first]) <= abs(nums[second])) ans[ind--] = nums[second] * nums[second--];
+            else ans[ind--] = nums[first] * nums[first++];
+        }
+        return ans;
+    }
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        //return approachOne(nums);
+        return approachTwo(nums);
+    }
+};

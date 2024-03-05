@@ -1,0 +1,31 @@
+class Solution {
+    int approachOne(string &s){
+        int first = 0, last = s.size() - 1;
+
+        while(first < last){
+            if(s[first] != s[last]) return last - first + 1;
+            while((first + 1 < last) && (s[first] == s[first + 1])) first++;
+            while((last - 1 > first) && (s[last] == s[last - 1])) last--;
+            first++; last--;
+        }
+        return last - first + 1 > 0 ? 1: 0;
+    }
+    int recursion(int &first, int &last, string &s){
+        if(first >= last) return last - first + 1 > 0 ? 1: 0;
+
+        if(s[first] != s[last]) return last - first + 1;
+        while((first + 1 < last) && (s[first] == s[first + 1])) first++;
+        while((last - 1 > first) && (s[last] == s[last - 1])) last--;
+        first++; last--;
+        return recursion(first, last, s);
+    }
+    int approachTwo(string &s){
+        int first = 0, last = s.size() - 1;
+        return recursion(first, last, s);
+    }
+public:
+    int minimumLength(string s) {
+        //return approachOne(s);
+        return approachTwo(s);
+    }
+};

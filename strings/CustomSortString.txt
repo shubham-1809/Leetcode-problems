@@ -1,0 +1,17 @@
+class Solution {
+public:
+    string customSortString(string order, string s) {
+        vector<int> freq(26, 0);
+        string ans;
+
+        for(char &ch : order) freq[ch - 'a']++;
+        for(char &ch : s){
+            if(freq[ch - 'a'] == 0) ans.push_back(ch);
+            else freq[ch - 'a']++;
+        }
+        for(char &ch : order){
+            if(freq[ch - 'a'] > 1) ans.append(freq[ch - 'a'] - 1, ch);
+        }
+        return ans;
+    }
+};

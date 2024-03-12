@@ -1,0 +1,42 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeZeroSumSublists(ListNode* head) {
+        
+        int currSum = 0;
+        ListNode* dummy = new ListNode(INT_MIN);
+        ListNode* currPtr = head;
+        dummy -> next = head;
+        unordered_map<int, ListNode*> hashMap;
+        hashMap[0] = dummy;
+
+        while(currPtr){
+            currSum += currPtr -> val;
+            if(hashMap.find(currSum) != hashMap.end()){
+                ListNode* temp = hashMap[currSum];
+		// we nedd to remove entry from map as well while deleting nodes whose sum is 0
+                ListNode* start = temp;
+                int sum = currSum;
+
+                while(start != currPtr){
+                    start = start -> next;
+                    sum += start -> val;
+                    if(start != currPtr) hashMap.erase(sum);
+                }
+                temp -> next = start -> next;
+            }
+            else hashMap[currSum] = currPtr;
+            currPtr = currPtr -> next;
+        }
+        return dummy -> next;
+    }
+};

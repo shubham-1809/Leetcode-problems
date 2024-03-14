@@ -1,0 +1,52 @@
+class Solution {
+private:
+    int bruteForce(vector<int> &nums, int &goal){
+        int cnt = 0, sum, size = nums.size();
+
+        for(int first = 0; first < size; first++){
+            sum = 0;
+            for(int second = first; second < size; second++){
+                sum += nums[second];
+                if(sum == goal) cnt++;
+                else if(sum > goal) break;
+            }
+        }
+        return cnt;
+    }
+    int betterSolution(vector<int>& nums, int &goal){
+        int size = nums.size(), currSum = 0, cnt = 0;
+        unordered_map<int, int> hashMap;
+        hashMap[0] = 1;
+
+        for(int ind = 0; ind < size; ind++){
+            currSum += nums[ind];
+            int remSum = currSum - goal;
+            if(hashMap.find(remSum) != hashMap.end()) cnt += hashMap[remSum];
+            hashMap[currSum]++;
+        }
+        return cnt;
+    }
+    int optimal(vector<int> &nums, int &goal){
+        int size = nums.size(), left = 0, right = 0, currSum = 0, prevZeros = 0, cnt = 0;
+
+        while(right < size){
+            currSum += nums[right];
+	    // little confusion in this logic ---> dry for sure, you will easily understand
+            while(left < right && (nums[left] == 0 || currSum > goal)){
+                if(nums[left] == 0) prevZeros++;
+                else prevZeros = 0;
+                //if(currSum == goal) cnt += 1 + prevZeros;
+                currSum -= nums[left++];
+            }
+            if(currSum == goal) cnt += 1 + prevZeros;
+            right++;
+        }
+        return cnt;
+    } 
+public:
+    int numSubarraysWithSum(vector<int>& nums, int goal) {
+        //return bruteForce(nums, goal);
+        //return betterSolution(nums, goal);
+        return optimal(nums, goal);
+    }
+};

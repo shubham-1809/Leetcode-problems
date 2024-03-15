@@ -1,0 +1,60 @@
+class Solution {
+    vector<int> bruteForce(vector<int> &nums){
+        int size = nums.size(), currProd;
+        vector<int> ans;
+
+        for(int ind1 = 0; ind1 < size; ind1++){
+            currProd = 1;
+            for(int ind2 = 0; ind2 < size; ind2++){
+                if(ind1 != ind2){
+                    currProd *= nums[ind2];
+                    if(currProd == 0) break;
+                }
+            }
+            ans.push_back(currProd);
+        }
+        return ans;
+    }
+    // this solution will not work if input element is 0
+    vector<int> better(vector<int> &nums){
+        int size = nums.size(), prod = 1;
+        vector<int> ans, prefixProd(size, 1);
+        prefixProd[0] = nums[0];
+
+        for(int ind = 1; ind < size; ind++) prefixProd[ind] = nums[ind] * prefixProd[ind - 1];
+        for(int ind = 0; ind < size; ind++) ans.push_back(prefixProd[size - 1] / nums[ind]);
+        return ans;
+    }
+    vector<int> optimal(vector<int> &nums){
+        int size = nums.size();
+        vector<int> prefix(size), suffix(size), ans;
+        prefix[0] = suffix[size - 1] = 1;
+        
+        for(int ind = 1; ind < size; ind++) prefix[ind] = nums[ind - 1] * prefix[ind - 1];
+        for(int ind = size - 2; ind >= 0; ind--) suffix[ind] = nums[ind + 1] * suffix[ind + 1];
+        for(int ind = 0; ind < size; ind++) ans.push_back(prefix[ind] * suffix[ind]);
+        return ans;
+    }
+    vector<int> optimal_space_optimization(vector<int> &nums){
+        int size = nums.size(), curr_prod = 1;
+        vector<int> ans;
+
+        for(int ind = 0; ind < size; ind++){
+            ans.push_back(curr_prod);
+            curr_prod *= nums[ind];
+        }
+        curr_prod = 1;
+        for(int ind = size - 1; ind >= 0; ind--){
+            ans[ind] *= curr_prod;
+            curr_prod *= nums[ind];
+        }
+        return ans;
+    }
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        //return bruteForce(nums);
+        //return better(nums);
+        //return optimal(nums);
+        return optimal_space_optimization(nums);
+    }
+};

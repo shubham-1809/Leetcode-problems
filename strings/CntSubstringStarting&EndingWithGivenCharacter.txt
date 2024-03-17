@@ -1,0 +1,28 @@
+class Solution {
+    long long bruteForce(string &s, char &c){
+        int size = s.size();
+        long long ans = 0;
+
+        for(int first = 0; first < size; first++){
+            if(s[first] == c){
+                for(int second = first; second < size; second++){
+                    if(s[first] == s[second]) ans++;
+                }
+            }
+        }
+        return ans;
+    }
+    long long optimal(string &s, char &c){
+        long long cntChar = 0;
+
+        for(char &ch : s){
+            if(ch == c) cntChar++;
+        }
+        return (cntChar * (cntChar + 1)) / 2;
+    }
+public:
+    long long countSubstrings(string s, char c) {
+        //return bruteForce(s, c);
+        return optimal(s, c);
+    }
+};

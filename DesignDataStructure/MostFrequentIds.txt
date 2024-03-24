@@ -1,0 +1,22 @@
+class Solution {
+public:
+    typedef long long ll;
+    vector<long long> mostFrequentIDs(vector<int>& nums, vector<int>& freq) {
+        int size = nums.size();
+        unordered_map<ll, ll> hashMap;
+        priority_queue<pair<ll, ll>> pq;
+        vector<ll> ans;
+
+        for(int ind = 0; ind < size; ind++){
+            int id = nums[ind];
+            int freqs = freq[ind];
+
+            hashMap[id] += freqs;
+            pq.push({hashMap[id], id});
+            // remove stale entries form map
+            while(hashMap[pq.top().second] != pq.top().first) pq.pop();
+            ans.push_back(pq.top().first);
+        }
+        return ans;
+    }
+};

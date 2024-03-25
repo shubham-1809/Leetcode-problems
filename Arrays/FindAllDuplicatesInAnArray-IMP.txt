@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<int> findDuplicates(vector<int>& nums) {
+        int size = nums.size();
+        vector<int> ans;
+
+        for(int ind = 0; ind < size; ind++){
+            int num = abs(nums[ind]);
+            int idx = num - 1;
+
+            if(nums[idx] < 0) ans.push_back(num);
+            else nums[idx] *= -1;
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,27 @@
+class Solution {
+public:
+    // tricky problem
+    // less than or equal to 0 and greater than size, discard those number by and replace them with 1
+    int firstMissingPositive(vector<int>& nums) {
+        int size = nums.size();
+        bool contains_1 = false;
+
+        for(int ind = 0; ind < size; ind++){
+            if(nums[ind] == 1) contains_1 = true;
+            else if(nums[ind] <= 0 || nums[ind] > size) nums[ind] = 1;
+        }
+        if(!contains_1) return 1;
+
+        // now we have only range from 1 to size so we can use array number as index wala pattern
+        for(int ind = 0; ind < size; ind++){
+            int num = abs(nums[ind]);
+            int idx = num - 1;
+            if(nums[idx] < 0) continue;
+            nums[idx] *= -1;
+        }
+        for(int ind = 0; ind < size; ind++){
+            if(nums[ind] > 0) return ind + 1;
+        }
+        return size + 1;
+    }
+};

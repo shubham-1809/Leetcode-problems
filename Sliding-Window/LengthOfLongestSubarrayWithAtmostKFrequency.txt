@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int maxSubarrayLength(vector<int>& nums, int k) {
+        int size = nums.size(), ans = 0, first = 0, second = 0;
+        unordered_map<int, int> hashMap;
+
+        while(second < size){
+            hashMap[nums[second]]++;
+            while(first < second && hashMap[nums[second]] > k){
+                hashMap[nums[first]]--;
+                first++;
+            }
+            ans = max(ans, second - first + 1);
+            second++;
+        }
+        return ans;
+    }
+};
